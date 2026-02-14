@@ -1,0 +1,31 @@
+import type { SVGProps, FC } from 'react';
+
+export type ChevronDirection = 'up' | 'down' | 'left' | 'right';
+
+const rotationMap: Record<ChevronDirection, number> = {
+    right: 0,
+    down: 90,
+    left: 180,
+    up: 270,
+};
+
+interface ChevronIconProps extends SVGProps<SVGSVGElement> {
+    direction?: ChevronDirection;
+}
+
+const ChevronIcon: FC<ChevronIconProps> = ({ direction = 'right', className, style, ...props }) => (
+    <svg
+        width="48"
+        height="48"
+        viewBox="0 0 48 48"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        className={className}
+        style={{ ...style, transform: `rotate(${rotationMap[direction]}deg)`, ...(style || {}) }}
+        {...props}
+    >
+        <path d="M15.9393 39.3107C15.3536 38.7249 15.3536 37.7751 15.9393 37.1893L29.3787 23.75L15.9393 10.3107C15.3536 9.72487 15.3536 8.77513 15.9393 8.18934C16.5251 7.60355 17.4749 7.60355 18.0607 8.18934L32.5607 22.6893C33.1464 23.2751 33.1464 24.2249 32.5607 24.8107L18.0607 39.3107C17.4749 39.8964 16.5251 39.8964 15.9393 39.3107Z" fill="currentColor" />
+    </svg>
+);
+
+export default ChevronIcon;
