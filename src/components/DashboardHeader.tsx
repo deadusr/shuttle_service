@@ -28,9 +28,9 @@ const DashboardHeader = ({ onSearch, onDateChange, onViewChange }: DashboardHead
                         setSearchQuery(e.target.value);
                         onSearch?.(e.target.value);
                     }}
-                    className="w-full pl-12 pr-4 py-3 bg-white rounded-2xl text-[15px] text-gray-900 placeholder-gray-400/80 shadow-[0_2px_8px_-2px_rgba(0,0,0,0.04)] ring-1 ring-gray-100 hover:ring-gray-200 focus:ring-2 focus:ring-blue-500/20 focus:outline-none transition-all duration-200 ease-out font-medium"
+                    className="w-full pl-12 pr-4 py-3 bg-white rounded-2xl text-[15px] text-gray-900 placeholder-gray-400/80 shadow-[0_2px_8px_-2px_rgba(0,0,0,0.04)] ring-1 ring-gray-100 hover:ring-gray-200 focus:ring-2 focus:ring-direction-forward/20 focus:outline-none transition-all duration-200 ease-out font-medium"
                 />
-                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-blue-500 transition-colors duration-200">
+                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-direction-forward transition-colors duration-200">
                     <Icon name="search" className="w-[18px] h-[18px]" />
                 </div>
             </div>
@@ -47,7 +47,7 @@ const DashboardHeader = ({ onSearch, onDateChange, onViewChange }: DashboardHead
 
                 <div className="flex items-center gap-2.5 px-4 py-1.5 cursor-pointer hover:bg-gray-50 rounded-xl transition-colors group">
                     <span className="text-[15px] font-semibold text-gray-900 tracking-tight">Четверг, 12 февраля</span>
-                    <Icon name="calendar" className="w-4 h-4 text-gray-400 group-hover:text-blue-500 transition-colors" />
+                    <Icon name="calendar" className="w-4 h-4 text-gray-400 group-hover:text-direction-forward transition-colors" />
                 </div>
 
                 <button

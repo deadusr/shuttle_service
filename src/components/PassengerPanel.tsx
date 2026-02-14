@@ -123,7 +123,7 @@ const PassengerPanel = ({ isCollapsed, onToggle }: { isCollapsed: boolean; onTog
             <div className={`absolute top-[68px] left-0 right-0 z-30 px-6 py-3 bg-white/90 backdrop-blur-md shadow-sm border-b border-gray-100 flex items-center justify-between transition-all duration-300 ${isScrolled ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0 pointer-events-none'}`}>
                 <div className="flex items-center gap-3 min-w-0">
                     <span className="text-lg font-bold text-gray-900 shrink-0">{trip.time}</span>
-                    <div className="flex items-center gap-1.5 text-sm font-medium text-blue-600 truncate">
+                    <div className="flex items-center gap-1.5 text-sm font-medium text-direction-forward truncate">
                         <span className="truncate">{trip.route.from}</span>
                         <span className="shrink-0">→</span>
                         <span className="truncate">{trip.route.to}</span>
@@ -143,9 +143,9 @@ const PassengerPanel = ({ isCollapsed, onToggle }: { isCollapsed: boolean; onTog
                 <div className="flex flex-col gap-6">
                     <div className="flex items-baseline gap-2 mb-2">
                         <span className="text-xl font-bold text-gray-900">{trip.time}</span>
-                        <div className="flex items-center gap-1.5 text-xl font-medium text-blue-500">
+                        <div className="flex items-center gap-1.5 text-xl font-medium text-direction-forward">
                             <span>{trip.route.from}</span>
-                            <Icon name="search" className="w-4 h-4 text-blue-400 rotate-90 hidden" /> {/* Arrow placeholder if needed */}
+                            <Icon name="search" className="w-4 h-4 text-direction-forward/70 rotate-90 hidden" /> {/* Arrow placeholder if needed */}
                             <span>→</span>
                             <span>{trip.route.to}</span>
                         </div>
@@ -209,7 +209,7 @@ const PassengerPanel = ({ isCollapsed, onToggle }: { isCollapsed: boolean; onTog
                 {/* Passenger List */}
                 <div className="flex flex-col gap-3">
                     {trip.passengers.map((passenger) => (
-                        <div key={passenger.id} className="group bg-white rounded-xl flex flex-col gap-3 border border-gray-200 p-4  hover:shadow-sm hover:border-blue-100 transition-all cursor-pointer relative">
+                        <div key={passenger.id} className="group bg-white rounded-xl flex flex-col gap-3 border border-gray-200 p-4  hover:shadow-sm hover:border-direction-forward-light transition-all cursor-pointer relative">
                             <div className="flex justify-between items-start">
                                 <div className="flex items-center gap-3">
                                     <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm shrink-0 ${passenger.avatar ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-100 text-gray-400'
@@ -258,7 +258,7 @@ const PassengerPanel = ({ isCollapsed, onToggle }: { isCollapsed: boolean; onTog
 
             {/* Fixed Bottom Section */}
             <div className="p-4 border-t border-gray-200 bg-white shrink-0 z-10">
-                <button className="w-full flex items-center justify-center gap-2 p-3 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white rounded-xl shadow-lg shadow-blue-200 transition-all duration-200 transform hover:-translate-y-0.5">
+                <button className="w-full flex items-center justify-center gap-2 p-3 bg-direction-forward hover:bg-direction-forward/90 active:bg-direction-forward/80 text-white rounded-xl shadow-lg shadow-direction-forward/20 transition-all duration-200 transform hover:-translate-y-0.5">
                     <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center">
                         <Icon name="person-add" className="w-4 h-4 text-white" />
                     </div>

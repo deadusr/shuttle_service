@@ -2,4 +2,9 @@
 
 @theme {
     --font-sans: "Inter", sans-serif;
+
+    --color-direction-forward: #1976D2;
+    --color-direction-forward-light: #E0F0FF;
+    --color-direction-return: #7B1FA2;
+    --color-direction-return-light: #EDE4F5;
 }
