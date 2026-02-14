@@ -98,7 +98,7 @@ const UnassignedTripsPanel = () => {
             </div>
 
             {/* Days list */}
-            <div className="flex-1 overflow-y-auto px-6 pb-6 scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-transparent">
+            <div className="flex-1 overflow-y-auto px-6 pb-6 scrollbar-hidden">
                 <div className="flex flex-col">
                     {mockUnassignedTrips.map((dayData) => {
                         const isExpanded = expandedDays.has(dayData.day);
@@ -122,33 +122,38 @@ const UnassignedTripsPanel = () => {
                                     />
                                 </button>
 
-                                {/* Trip chips - two columns */}
-                                {isExpanded && (
-                                    <div className="grid grid-cols-2 gap-3 pb-5 pt-1">
-                                        {/* Left column: СПБ */}
-                                        <div className="flex flex-col gap-2">
-                                            {spbTrips.map((trip) => (
-                                                <TripChip
-                                                    key={trip.id}
-                                                    trip={trip}
-                                                    isActive={activeTripId === trip.id}
-                                                    onClick={() => handleTripClick(trip.id)}
-                                                />
-                                            ))}
-                                        </div>
-                                        {/* Right column: БОР */}
-                                        <div className="flex flex-col gap-2">
-                                            {borTrips.map((trip) => (
-                                                <TripChip
-                                                    key={trip.id}
-                                                    trip={trip}
-                                                    isActive={activeTripId === trip.id}
-                                                    onClick={() => handleTripClick(trip.id)}
-                                                />
-                                            ))}
+                                {/* Trip chips - two columns (animated) */}
+                                <div
+                                    className="grid transition-[grid-template-rows] duration-300 ease-in-out"
+                                    style={{ gridTemplateRows: isExpanded ? '1fr' : '0fr' }}
+                                >
+                                    <div className="overflow-hidden">
+                                        <div className="grid grid-cols-2 gap-3 pb-5 pt-1">
+                                            {/* Left column: СПБ */}
+                                            <div className="flex flex-col gap-2">
+                                                {spbTrips.map((trip) => (
+                                                    <TripChip
+                                                        key={trip.id}
+                                                        trip={trip}
+                                                        isActive={activeTripId === trip.id}
+                                                        onClick={() => handleTripClick(trip.id)}
+                                                    />
+                                                ))}
+                                            </div>
+                                            {/* Right column: БОР */}
+                                            <div className="flex flex-col gap-2">
+                                                {borTrips.map((trip) => (
+                                                    <TripChip
+                                                        key={trip.id}
+                                                        trip={trip}
+                                                        isActive={activeTripId === trip.id}
+                                                        onClick={() => handleTripClick(trip.id)}
+                                                    />
+                                                ))}
+                                            </div>
                                         </div>
                                     </div>
-                                )}
+                                </div>
                             </div>
                         );
                     })}

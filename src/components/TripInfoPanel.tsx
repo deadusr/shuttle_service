@@ -58,7 +58,7 @@ const TripInfoPanel = () => {
             </div>
 
             <div
-                className="flex-1 flex flex-col gap-8 overflow-y-auto px-6 pb-6 scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-transparent"
+                className="flex-1 flex flex-col gap-8 overflow-y-auto px-6 pb-6 scrollbar-hidden"
                 onScroll={handleScroll}
             >
                 {/* Route Header */}

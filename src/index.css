@@ -8,3 +8,12 @@
     --color-direction-return: #7B1FA2;
     --color-direction-return-light: #EDE4F5;
 }
+
+@utility scrollbar-hidden {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
