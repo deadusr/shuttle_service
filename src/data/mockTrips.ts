@@ -6,7 +6,7 @@ export const mockTrips: Trip[] = [
         id: '1',
         route: { from: 'БОР', to: 'СПБ' },
         time: '05:00',
-        status: 'scheduled',
+        status: 'finished',
         statusLabel: 'Ожидание',
         driver: {
             name: 'Иванов Иван',
@@ -22,8 +22,8 @@ export const mockTrips: Trip[] = [
         id: '2',
         route: { from: 'БОР', to: 'СПБ' },
         time: '07:00',
-        status: 'scheduled',
-        statusLabel: 'Ожидание',
+        status: 'en-route',
+        statusLabel: 'Выехал 23 минуты назад',
         driver: {
             name: 'Иванов Иван',
             phone: '+7 999 000-00-00',

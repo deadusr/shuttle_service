@@ -85,8 +85,11 @@ const StatusBadge = ({ status }: { status: PassengerStatus }) => {
     );
 };
 
-const PassengerPanel = ({ isCollapsed, onToggle }: { isCollapsed: boolean; onToggle: () => void }) => {
+import { useUIStore } from '../store/uiStore';
+
+const PassengerPanel = () => {
     // const [isCollapsed, setIsCollapsed] = useState(false); // Removed local state
+    const { isPassengerPanelCollapsed, togglePassengerPanel } = useUIStore();
     const [trip] = useState<Trip>(mockTrip);
     const [isScrolled, setIsScrolled] = useState(false);
 
@@ -94,11 +97,11 @@ const PassengerPanel = ({ isCollapsed, onToggle }: { isCollapsed: boolean; onTog
         setIsScrolled(e.currentTarget.scrollTop > 40);
     };
 
-    if (isCollapsed) {
+    if (isPassengerPanelCollapsed) {
         return (
             <div className="fixed top-0 right-0 h-screen w-16 bg-white border-l border-gray-200 flex flex-col items-center py-4 z-40 transition-all duration-300">
                 <button
-                    onClick={onToggle}
+                    onClick={togglePassengerPanel}
                     className="p-2 hover:bg-gray-100 rounded-lg text-gray-500 transition-colors"
                 >
                     <Icon name="dock-left" className="w-6 h-6 rotate-180" />
@@ -112,7 +115,7 @@ const PassengerPanel = ({ isCollapsed, onToggle }: { isCollapsed: boolean; onTog
             {/* Header / Collapse Toggle */}
             <div className="p-4 flex items-center justify-between shrink-0">
                 <button
-                    onClick={onToggle}
+                    onClick={togglePassengerPanel}
                     className="p-2 -ml-2 hover:bg-gray-100 rounded-lg text-gray-400 hover:text-gray-600 transition-colors cursor-pointer"
                 >
                     <Icon name="dock-left" className="w-5 h-5" />

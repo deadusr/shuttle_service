@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import { useUIStore } from './store/uiStore';
 import Sidebar from './components/Sidebar';
 import PassengerPanel from './components/PassengerPanel';
 import Dashboard from './components/Dashboard';
 
 const App = () => {
-  const [isPassengerPanelCollapsed, setIsPassengerPanelCollapsed] = useState(false);
+  const { isPassengerPanelCollapsed } = useUIStore();
 
   return (
     <div className="flex min-h-screen bg-gray-50">
@@ -18,10 +18,7 @@ const App = () => {
       >
         <Dashboard />
       </div>
-      <PassengerPanel
-        isCollapsed={isPassengerPanelCollapsed}
-        onToggle={() => setIsPassengerPanelCollapsed(!isPassengerPanelCollapsed)}
-      />
+      <PassengerPanel />
     </div>
   );
 };
