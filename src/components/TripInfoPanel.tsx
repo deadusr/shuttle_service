@@ -7,8 +7,8 @@ import TripHeader from './trip/TripHeader';
 import DriverCard from './trip/DriverCard';
 import PassengerList from './passenger/PassengerList';
 
-const PassengerPanel = () => {
-    const { isPassengerPanelCollapsed, togglePassengerPanel } = useUIStore();
+const TripInfoPanel = () => {
+    const { isTripInfoPanelCollapsed, toggleTripInfoPanel } = useUIStore();
     const [trip] = useState<Trip>(mockTrip);
     const [isScrolled, setIsScrolled] = useState(false);
 
@@ -16,11 +16,11 @@ const PassengerPanel = () => {
         setIsScrolled(e.currentTarget.scrollTop > 40);
     };
 
-    if (isPassengerPanelCollapsed) {
+    if (isTripInfoPanelCollapsed) {
         return (
             <div className="fixed top-0 right-0 h-screen w-16 bg-white border-l border-gray-200 flex flex-col items-center py-4 z-40 transition-all duration-300">
                 <button
-                    onClick={togglePassengerPanel}
+                    onClick={toggleTripInfoPanel}
                     className="p-2 hover:bg-gray-100 rounded-lg text-gray-500 transition-colors"
                 >
                     <Icon name="dock-left" className="w-6 h-6 rotate-180" />
@@ -34,7 +34,7 @@ const PassengerPanel = () => {
             {/* Header / Collapse Toggle */}
             <div className="p-4 flex items-center justify-between shrink-0">
                 <button
-                    onClick={togglePassengerPanel}
+                    onClick={toggleTripInfoPanel}
                     className="p-2 -ml-2 hover:bg-gray-100 rounded-lg text-gray-400 hover:text-gray-600 transition-colors cursor-pointer"
                 >
                     <Icon name="dock-left" className="w-5 h-5" />
@@ -90,5 +90,5 @@ const PassengerPanel = () => {
     );
 };
 
-export default PassengerPanel;
+export default TripInfoPanel;
 

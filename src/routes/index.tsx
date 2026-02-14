@@ -10,7 +10,7 @@ export const Route = createFileRoute('/')({
 
 
 function Dashboard() {
-  const { isPassengerPanelCollapsed } = useUIStore();
+  const { isTripInfoPanelCollapsed } = useUIStore();
   // Filter trips by direction
   const outboundTrips = mockTrips.filter(t => t.route.from === 'БОР' && t.route.to === 'СПБ');
   const inboundTrips = mockTrips.filter(t => t.route.from === 'СПБ' && t.route.to === 'БОР');
@@ -33,7 +33,7 @@ function Dashboard() {
                   key={trip.id}
                   trip={trip}
                   variant="blue"
-                  size={isPassengerPanelCollapsed ? 'long' : 'short'}
+                  size={isTripInfoPanelCollapsed ? 'long' : 'short'}
                 />
               ))}
             </div>
@@ -53,7 +53,7 @@ function Dashboard() {
                   key={trip.id}
                   trip={trip}
                   variant="purple"
-                  size={isPassengerPanelCollapsed ? 'long' : 'short'}
+                  size={isTripInfoPanelCollapsed ? 'long' : 'short'}
                 />
               ))}
             </div>

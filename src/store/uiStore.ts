@@ -1,13 +1,13 @@
 import { create } from 'zustand';
 
 interface UIState {
-    isPassengerPanelCollapsed: boolean;
-    togglePassengerPanel: () => void;
-    setPassengerPanelCollapsed: (value: boolean) => void;
+    isTripInfoPanelCollapsed: boolean;
+    toggleTripInfoPanel: () => void;
+    setTripInfoPanelCollapsed: (value: boolean) => void;
 }
 
 export const useUIStore = create<UIState>((set) => ({
-    isPassengerPanelCollapsed: false,
-    togglePassengerPanel: () => set((state) => ({ isPassengerPanelCollapsed: !state.isPassengerPanelCollapsed })),
-    setPassengerPanelCollapsed: (value) => set({ isPassengerPanelCollapsed: value }),
+    isTripInfoPanelCollapsed: false,
+    toggleTripInfoPanel: () => set((state) => ({ isTripInfoPanelCollapsed: !state.isTripInfoPanelCollapsed })),
+    setTripInfoPanelCollapsed: (value) => set({ isTripInfoPanelCollapsed: value }),
 }));

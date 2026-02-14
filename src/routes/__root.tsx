@@ -1,7 +1,7 @@
 import { Outlet, createRootRoute } from '@tanstack/react-router'
 import { useUIStore } from '../store/uiStore';
 import Sidebar from '../components/Sidebar';
-import PassengerPanel from '../components/PassengerPanel';
+import TripInfoPanel from '../components/TripInfoPanel';
 import DashboardHeader from '../components/DashboardHeader';
 
 export const Route = createRootRoute({
@@ -9,7 +9,7 @@ export const Route = createRootRoute({
 })
 
 function RootComponent() {
-    const { isPassengerPanelCollapsed } = useUIStore();
+    const { isTripInfoPanelCollapsed } = useUIStore();
 
     return (
         <div className="flex min-h-screen bg-gray-50">
@@ -18,14 +18,14 @@ function RootComponent() {
                 className="flex-1 flex flex-col min-w-0 transition-all duration-300 ease-in-out"
                 style={{
                     marginLeft: '72px',
-                    marginRight: isPassengerPanelCollapsed ? '64px' : '472px'
+                    marginRight: isTripInfoPanelCollapsed ? '64px' : '472px'
                 }}
             >
                 <DashboardHeader />
 
                 <Outlet />
             </div>
-            <PassengerPanel />
+            <TripInfoPanel />
         </div>
 
     )
