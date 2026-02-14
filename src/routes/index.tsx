@@ -1,5 +1,4 @@
 import { createFileRoute } from '@tanstack/react-router'
-import DashboardHeader from '../components/DashboardHeader';
 import TripCard from '../components/TripCard';
 import { mockTrips } from '../data/mockTrips';
 import { useUIStore } from '../store/uiStore';
