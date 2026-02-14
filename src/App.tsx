@@ -1,7 +1,7 @@
 import { useUIStore } from './store/uiStore';
 import Sidebar from './components/Sidebar';
 import PassengerPanel from './components/PassengerPanel';
-import Dashboard from './components/Dashboard';
+import Dashboard from './routes/Dashboard';
 
 const App = () => {
   const { isPassengerPanelCollapsed } = useUIStore();
