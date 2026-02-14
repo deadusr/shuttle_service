@@ -1,4 +1,6 @@
-const DockLeftIcon = ({ className, ...props }) => {
+import type { SVGProps } from 'react';
+
+const DockLeftIcon = ({ className, ...props }: SVGProps<SVGSVGElement>) => {
     return (
         <svg
             width="24"

@@ -1,4 +1,6 @@
-const SignOutIcon = ({ className, ...props }) => {
+import type { SVGProps } from 'react';
+
+const SignOutIcon = ({ className, ...props }: SVGProps<SVGSVGElement>) => {
     return (
         <svg
             width="24"

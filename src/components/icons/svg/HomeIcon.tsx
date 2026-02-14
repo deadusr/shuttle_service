@@ -1,4 +1,6 @@
-const HomeIcon = ({ className, ...props }) => {
+import type { SVGProps } from 'react';
+
+const HomeIcon = ({ className, ...props }: SVGProps<SVGSVGElement>) => {
     return (
         <svg
             width="28"
