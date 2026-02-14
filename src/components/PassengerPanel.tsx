@@ -85,8 +85,8 @@ const StatusBadge = ({ status }: { status: PassengerStatus }) => {
     );
 };
 
-const PassengerPanel = () => {
-    const [isCollapsed, setIsCollapsed] = useState(false);
+const PassengerPanel = ({ isCollapsed, onToggle }: { isCollapsed: boolean; onToggle: () => void }) => {
+    // const [isCollapsed, setIsCollapsed] = useState(false); // Removed local state
     const [trip] = useState<Trip>(mockTrip);
     const [isScrolled, setIsScrolled] = useState(false);
 
@@ -98,7 +98,7 @@ const PassengerPanel = () => {
         return (
             <div className="fixed top-0 right-0 h-screen w-16 bg-white border-l border-gray-200 flex flex-col items-center py-4 z-40 transition-all duration-300">
                 <button
-                    onClick={() => setIsCollapsed(false)}
+                    onClick={onToggle}
                     className="p-2 hover:bg-gray-100 rounded-lg text-gray-500 transition-colors"
                 >
                     <Icon name="dock-left" className="w-6 h-6 rotate-180" />
@@ -112,7 +112,7 @@ const PassengerPanel = () => {
             {/* Header / Collapse Toggle */}
             <div className="p-4 flex items-center justify-between shrink-0">
                 <button
-                    onClick={() => setIsCollapsed(true)}
+                    onClick={onToggle}
                     className="p-2 -ml-2 hover:bg-gray-100 rounded-lg text-gray-400 hover:text-gray-600 transition-colors cursor-pointer"
                 >
                     <Icon name="dock-left" className="w-5 h-5" />
@@ -209,7 +209,7 @@ const PassengerPanel = () => {
                 {/* Passenger List */}
                 <div className="flex flex-col gap-3">
                     {trip.passengers.map((passenger) => (
-                        <div key={passenger.id} className="group bg-white rounded-xl flex flex-col gap-3 border border-gray-200 p-4 shadow-sm hover:shadow-md hover:border-blue-100 transition-all cursor-pointer relative">
+                        <div key={passenger.id} className="group bg-white rounded-xl flex flex-col gap-3 border border-gray-200 p-4  hover:shadow-sm hover:border-blue-100 transition-all cursor-pointer relative">
                             <div className="flex justify-between items-start">
                                 <div className="flex items-center gap-3">
                                     <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm shrink-0 ${passenger.avatar ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-100 text-gray-400'
