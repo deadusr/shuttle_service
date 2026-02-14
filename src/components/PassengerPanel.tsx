@@ -88,6 +88,11 @@ const StatusBadge = ({ status }: { status: PassengerStatus }) => {
 const PassengerPanel = () => {
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [trip] = useState<Trip>(mockTrip);
+    const [isScrolled, setIsScrolled] = useState(false);
+
+    const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+        setIsScrolled(e.currentTarget.scrollTop > 40);
+    };
 
     if (isCollapsed) {
         return (
@@ -114,7 +119,26 @@ const PassengerPanel = () => {
                 </button>
             </div>
 
-            <div className="flex-1 flex flex-col gap-8 overflow-y-auto px-6 pb-6 scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-transparent">
+            {/* Scrolled Sticky Header */}
+            <div className={`absolute top-[68px] left-0 right-0 z-30 px-6 py-3 bg-white/90 backdrop-blur-md shadow-sm border-b border-gray-100 flex items-center justify-between transition-all duration-300 ${isScrolled ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0 pointer-events-none'}`}>
+                <div className="flex items-center gap-3 min-w-0">
+                    <span className="text-lg font-bold text-gray-900 shrink-0">{trip.time}</span>
+                    <div className="flex items-center gap-1.5 text-sm font-medium text-blue-600 truncate">
+                        <span className="truncate">{trip.route.from}</span>
+                        <span className="shrink-0">→</span>
+                        <span className="truncate">{trip.route.to}</span>
+                    </div>
+                </div>
+                <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-700 bg-emerald-100 px-2 py-1 rounded-lg shrink-0">
+                    <Icon name="seat" className="w-3.5 h-3.5 text-emerald-600" />
+                    <span>{trip.driver.seatsOccupied}/{trip.driver.seatsTotal}</span>
+                </div>
+            </div>
+
+            <div
+                className="flex-1 flex flex-col gap-8 overflow-y-auto px-6 pb-6 scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-transparent"
+                onScroll={handleScroll}
+            >
                 {/* Route Header */}
                 <div className="flex flex-col gap-6">
                     <div className="flex items-baseline gap-2 mb-2">
