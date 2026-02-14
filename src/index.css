@@ -1,1 +1,126 @@
 @import "tailwindcss";
+
+/* ===========================
+   Sidebar
+   =========================== */
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 72px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: #ffffff;
+    border-right: 1px solid #e5e7eb;
+    z-index: 50;
+}
+
+/* Logo block */
+.sidebar__logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 14px 0;
+    flex-shrink: 0;
+}
+
+/* Navigation */
+.sidebar__nav {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 8px 0;
+    flex: 1;
+}
+
+.sidebar__nav-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    border: none;
+    background: transparent;
+    color: #9ca3af;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.sidebar__nav-item:hover {
+    background-color: #f3f4f6;
+    color: #374151;
+}
+
+.sidebar__nav-item--active {
+    background-color: #f3f4f6;
+    color: #111827;
+}
+
+/* Icon sizing */
+.sidebar__icon {
+    width: 22px;
+    height: 22px;
+}
+
+/* Footer (user section) */
+.sidebar__footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 0 16px;
+    flex-shrink: 0;
+}
+
+/* Avatar */
+.sidebar__avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #fce4ec;
+    color: #e91e63;
+    font-size: 13px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    letter-spacing: -0.02em;
+    user-select: none;
+}
+
+.sidebar__avatar:hover {
+    transform: scale(1.08);
+}
+
+/* Sign out button */
+.sidebar__sign-out {
+    color: #9ca3af;
+}
+
+.sidebar__sign-out:hover {
+    color: #ef4444;
+    background-color: #fef2f2;
+}
+
+/* ===========================
+   Main Layout
+   =========================== */
+
+.app-layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+.app-content {
+    margin-left: 72px;
+    flex: 1;
+    background-color: #f8fafc;
+    min-height: 100vh;
+}
