@@ -2,6 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import TripCard from '../components/TripCard';
 import { mockTrips } from '../data/mockTrips';
 import { useUIStore } from '../store/uiStore';
+import { useTrips } from '../hooks/useTrips';
 
 export const Route = createFileRoute('/')({
   component: Dashboard,
@@ -14,6 +15,12 @@ function Dashboard() {
   // Filter trips by direction
   const outboundTrips = mockTrips.filter(t => t.route.from === 'БОР' && t.route.to === 'СПБ');
   const inboundTrips = mockTrips.filter(t => t.route.from === 'СПБ' && t.route.to === 'БОР');
+
+  const { data: trips } = useTrips(
+    '2026-02-16'
+  );
+
+  console.log(trips);
 
   return (
     <main className="flex-1 flex flex-col bg-gray-100 min-w-0 overflow-hidden relative">

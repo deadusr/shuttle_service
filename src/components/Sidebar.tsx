@@ -1,7 +1,8 @@
 import Logo from './logo';
 import { Icon } from './icons';
+import { useAuthStore } from '../store/authStore';
 
-import { Link, useRouterState } from '@tanstack/react-router';
+import { Link, useNavigate, useRouterState } from '@tanstack/react-router';
 
 const navItems = [
     { to: '/', icon: 'home', label: 'Главная' },
@@ -12,6 +13,13 @@ const Sidebar = () => {
     // Get current path to highlight active link
     const router = useRouterState();
     const currentPath = router.location.pathname;
+    const logout = useAuthStore((s) => s.logout);
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        logout();
+        navigate({ to: '/login' });
+    };
 
     return (
         <aside className="fixed top-0 left-0 w-[72px] h-screen flex flex-col bg-white border-r border-gray-200 z-50">
@@ -50,6 +58,7 @@ const Sidebar = () => {
                     ЮА
                 </div>
                 <button
+                    onClick={handleLogout}
                     className="flex items-center justify-center w-11 h-11 rounded-xl border-none bg-transparent text-gray-400 cursor-pointer transition-all duration-200 ease-in-out hover:text-red-500 hover:bg-red-50"
                     title="Выход"
                 >
