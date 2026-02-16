@@ -5,6 +5,7 @@ import CarIcon from './svg/CarIcon';
 import ChevronIcon, { ChevronDirection } from './svg/ChevronIcon';
 import ChevronCircleIcon from './svg/ChevronCircleIcon';
 import CommentIcon from './svg/CommentIcon';
+import DismissIcon from './svg/DismissIcon';
 import DockLeftIcon from './svg/DockLeftIcon';
 import HomeIcon from './svg/HomeIcon';
 import LocationIcon from './svg/LocationIcon';
@@ -22,6 +23,7 @@ export type Icons =
     "chevron" |
     "chevron-circle" |
     "comment" |
+    "dismiss" |
     "dock-left" |
     "home" |
     "location" |
@@ -51,6 +53,8 @@ const Icon: FC<IconProps> = ({ name, className, ...props }) => {
             return <ChevronCircleIcon className={className} {...props} />;
         case 'comment':
             return <CommentIcon className={className} {...props} />;
+        case 'dismiss':
+            return <DismissIcon className={className} {...props} />;
         case 'dock-left':
             return <DockLeftIcon className={className} {...props} />;
         case 'home':
@@ -77,6 +81,7 @@ export {
     ChevronIcon,
     ChevronCircleIcon,
     CommentIcon,
+    DismissIcon,
     DockLeftIcon,
     HomeIcon,
     LocationIcon,

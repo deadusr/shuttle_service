@@ -10,6 +10,8 @@ interface UIState {
     isUnassignedPanelCollapsed: boolean;
     toggleUnassignedPanel: () => void;
     setUnassignedPanelCollapsed: (value: boolean) => void;
+    highlightedTripId: string | null;
+    setHighlightedTripId: (id: string | null) => void;
 }
 
 export const useUIStore = create<UIState>((set) => ({
@@ -21,4 +23,6 @@ export const useUIStore = create<UIState>((set) => ({
     isUnassignedPanelCollapsed: true,
     toggleUnassignedPanel: () => set((state) => ({ isUnassignedPanelCollapsed: !state.isUnassignedPanelCollapsed })),
     setUnassignedPanelCollapsed: (value) => set({ isUnassignedPanelCollapsed: value }),
+    highlightedTripId: null,
+    setHighlightedTripId: (id) => set({ highlightedTripId: id }),
 }));

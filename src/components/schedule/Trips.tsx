@@ -3,6 +3,7 @@ import { Trip, UnassignedTrip, Driver } from '../../types';
 import { useUnassignedTrips, useUpdateTrip } from '../../hooks/useTrips';
 import { useState } from 'react';
 import TripChip from '../common/TripChip';
+import { useUIStore } from '../../store/uiStore';
 
 interface TripBlocksProps {
     trips: Trip[];
@@ -133,6 +134,7 @@ const OneWayTripCard = ({ trip }: { trip: Trip }) => {
 
 export const RecomendedTrips = ({ trips, maxItems = 4, onTripClick }: { trips: UnassignedTrip[], maxItems?: number, onTripClick?: (tripId: string) => void }) => {
     const maxHeight = (maxItems * 46) + 12;
+    const { highlightedTripId } = useUIStore();
 
     return (
         <div
@@ -140,7 +142,13 @@ export const RecomendedTrips = ({ trips, maxItems = 4, onTripClick }: { trips: U
             style={{ maxHeight: trips.length > maxItems ? maxHeight : undefined }}
         >
             {trips.map(trip => (
-                <TripChip key={trip.id} trip={trip} variant="compact" onClick={() => onTripClick?.(trip.id)} />
+                <TripChip
+                    key={trip.id}
+                    trip={trip}
+                    variant="compact"
+                    isActive={trip.id === highlightedTripId}
+                    onClick={() => onTripClick?.(trip.id)}
+                />
             ))}
         </div>
     )

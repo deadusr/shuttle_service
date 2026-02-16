@@ -29,7 +29,7 @@ function Dashboard() {
 
           {
             routes?.map(route => (
-              <div style={{ background: route.from.color + "11" }} className="max-w-xl w-full flex flex-col gap-4 p-4 rounded-3xl">
+              <div key={route.id} style={{ background: route.from.color + "11" }} className="max-w-xl w-full flex flex-col gap-4 p-4 rounded-3xl">
                 <div className="sticky top-0 z-10 backdrop-blur-sm py-2 rounded-t-xl">
                   <h2 style={{ color: route.from.color }} className="text-xl font-medium flex items-center gap-2">
                     {route.from.shortName} ➔ {route.to.shortName}

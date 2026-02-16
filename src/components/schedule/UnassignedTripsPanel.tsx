@@ -12,7 +12,7 @@ interface UnassignedTripsPanelProps {
 }
 
 const UnassignedTripsPanel = ({ currentDate }: UnassignedTripsPanelProps) => {
-    const { isUnassignedPanelCollapsed, toggleUnassignedPanel } = useUIStore();
+    const { isUnassignedPanelCollapsed, toggleUnassignedPanel, highlightedTripId, setHighlightedTripId } = useUIStore();
 
     const { weekStart, weekEnd, daysOfWeek } = useMemo(() => {
         const start = startOfWeek(currentDate, { weekStartsOn: 1 });
@@ -28,7 +28,7 @@ const UnassignedTripsPanel = ({ currentDate }: UnassignedTripsPanelProps) => {
         return new Set([format(currentDate, 'yyyy-MM-dd')]);
     });
 
-    const [activeTripId, setActiveTripId] = useState<string | null>(null);
+
 
     const { data: trips = [] } = useUnassignedTrips(
         weekStart.toISOString(), weekEnd.toISOString()
@@ -65,7 +65,7 @@ const UnassignedTripsPanel = ({ currentDate }: UnassignedTripsPanelProps) => {
     };
 
     const handleTripClick = (tripId: string) => {
-        setActiveTripId(prev => prev === tripId ? null : tripId);
+        setHighlightedTripId(highlightedTripId === tripId ? null : tripId);
     };
 
     return (
@@ -101,7 +101,7 @@ const UnassignedTripsPanel = ({ currentDate }: UnassignedTripsPanelProps) => {
                                 trips={dayTrips}
                                 isExpanded={expandedDays.has(dateKey)}
                                 onToggle={() => toggleDay(dateKey)}
-                                activeTripId={activeTripId}
+                                activeTripId={highlightedTripId}
                                 onTripClick={handleTripClick}
                             />
                         );

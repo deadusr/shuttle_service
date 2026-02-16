@@ -12,12 +12,23 @@ const TripChip = ({ trip, isActive = false, variant = 'default', onClick }: Trip
     const destination = trip.route.to.shortName || trip.route.to.name;
 
     if (variant === 'compact') {
+        const borderColor = isActive ? trip.route.to.color : 'var(--color-gray-300)';
+        const backgroundColor = isActive ? trip.route.to.color + '16' : 'transparent';
+        const textColor = isActive ? trip.route.to.color : 'inherit';
+
         return (
             <div
                 onClick={onClick}
-                className="w-full shrink-0 rounded-full border border-gray-300 border-dashed py-2 text-sm text-center text-gray-300 cursor-pointer hover:border-gray-400 hover:text-gray-400 transition-colors"
+                style={{
+                    borderStyle: 'dashed',
+                    borderColor,
+                    backgroundColor
+                }}
+                className={`w-full shrink-0 rounded-full border py-2 text-sm text-center cursor-pointer transition-colors ${!isActive ? 'text-gray-300 hover:border-gray-400 hover:text-gray-400' : ''}`}
             >
-                <span>{format(trip.departure, 'HH:mm')} ➔ {destination}</span>
+                <span style={{ color: isActive ? textColor : 'inherit' }}>
+                    {format(trip.departure, 'HH:mm')} ➔ {destination}
+                </span>
             </div>
         );
     }
