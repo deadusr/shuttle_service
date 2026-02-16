@@ -56,6 +56,11 @@ export const TripBlocks = ({ trips, date, driver }: TripBlocksProps) => {
         updateTrip.mutate({ id: tripId, data: { driver: driver.id } });
     };
 
+    const handleRemoveDriver = (tripId: string, e: React.MouseEvent) => {
+        e.stopPropagation();
+        updateTrip.mutate({ id: tripId, data: { driver: null } });
+    };
+
     const groups = groupTrips(trips);
     const hasOnlyRoundTrips = groups.length > 0 && groups.every(g => g.type === 'roundTrip');
 
@@ -67,9 +72,9 @@ export const TripBlocks = ({ trips, date, driver }: TripBlocksProps) => {
         <div className='flex flex-col gap-2'>
             {groups.map((group) =>
                 group.type === 'roundTrip' ? (
-                    <RoundTripCard key={group.tripTo.id} tripTo={group.tripTo} tripBack={group.tripBack} />
+                    <RoundTripCard key={group.tripTo.id} tripTo={group.tripTo} tripBack={group.tripBack} onRemove={handleRemoveDriver} />
                 ) : (
-                    <OneWayTripCard key={group.trip.id} trip={group.trip} />
+                    <OneWayTripCard key={group.trip.id} trip={group.trip} onRemove={handleRemoveDriver} />
                 )
             )}
 
@@ -87,10 +92,16 @@ export const TripBlocks = ({ trips, date, driver }: TripBlocksProps) => {
     );
 };
 
-const RoundTripCard = ({ tripTo, tripBack }: { tripTo: Trip; tripBack: Trip }) => {
+const RoundTripCard = ({ tripTo, tripBack, onRemove }: { tripTo: Trip; tripBack: Trip; onRemove: (tripId: string, e: React.MouseEvent) => void }) => {
     return (
         <div className='bg-white rounded-2xl shadow-md hover:shadow-lg transition-shadow cursor-pointer'>
-            <div className='flex flex-col gap-1 px-3 pt-3 pb-2 border-b border-dashed border-gray-400'>
+            <div className='flex flex-col gap-1 px-3 pt-3 pb-2 border-b border-dashed border-gray-400 relative group'>
+                <button
+                    onClick={(e) => onRemove(tripTo.id, e)}
+                    className='absolute h-5 w-5 flex items-center justify-center -top-1 -right-1 p-0.5 rounded-full bg-gray-200 hover:bg-gray-300 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer'
+                >
+                    <Icon name="dismiss" className='w-2 h-2 text-gray-500 hover:text-gray-900' />
+                </button>
                 <div className='flex gap-1 items-center'>
                     <span className='text-base font-medium text-gray-900'>{tripTo.departure.toTimeString().split(' ')[0].slice(0, 5)}</span>
                     <div style={{ backgroundColor: tripTo.route.to.color + '16', color: tripTo.route.to.color }} className='p-0.5'>
@@ -101,7 +112,13 @@ const RoundTripCard = ({ tripTo, tripBack }: { tripTo: Trip; tripBack: Trip }) =
                 <span className='text-base font-medium text-green-600 ml-auto'>{tripTo.bookedSeats}/{tripTo.maxSeats}</span>
             </div>
 
-            <div className='flex flex-col gap-1 px-3 pt-3 pb-2'>
+            <div className='flex flex-col gap-1 px-3 pt-3 pb-2 relative group'>
+                <button
+                    onClick={(e) => onRemove(tripBack.id, e)}
+                    className='absolute h-5 w-5 flex items-center justify-center -top-2 -right-1.5 p-0.5 rounded-full bg-gray-200 hover:bg-gray-300 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer'
+                >
+                    <Icon name="dismiss" className='w-2 h-2 text-gray-500 hover:text-gray-900' />
+                </button>
                 <div className='flex gap-1 items-center'>
                     <span className='text-base font-medium text-gray-900'>{tripBack.departure.toTimeString().split(' ')[0].slice(0, 5)}</span>
                     <div style={{ backgroundColor: tripBack.route.to.color + '16', color: tripBack.route.to.color }} className='p-0.5'>
@@ -115,9 +132,15 @@ const RoundTripCard = ({ tripTo, tripBack }: { tripTo: Trip; tripBack: Trip }) =
     );
 };
 
-const OneWayTripCard = ({ trip }: { trip: Trip }) => {
+const OneWayTripCard = ({ trip, onRemove }: { trip: Trip; onRemove: (tripId: string, e: React.MouseEvent) => void }) => {
     return (
-        <div className='bg-white rounded-2xl shadow-md hover:shadow-lg transition-shadow cursor-pointer'>
+        <div className='bg-white rounded-2xl shadow-md hover:shadow-lg transition-shadow cursor-pointer relative group'>
+            <button
+                onClick={(e) => onRemove(trip.id, e)}
+                className='absolute h-5 w-5 flex items-center justify-center -top-1 -right-1 p-0.5 rounded-full bg-gray-200 hover:bg-gray-300 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer'
+            >
+                <Icon name="dismiss" className='w-2 h-2 text-gray-500 hover:text-gray-900' />
+            </button>
             <div className='flex flex-col gap-1 px-3 pt-3 pb-2'>
                 <div className='flex gap-1 items-center'>
                     <span className='text-base font-medium text-gray-900'>{trip.departure.toTimeString().split(' ')[0].slice(0, 5)}</span>
