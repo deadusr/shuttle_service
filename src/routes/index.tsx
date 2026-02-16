@@ -1,6 +1,5 @@
 import { createFileRoute, useSearch } from '@tanstack/react-router'
 import TripCard from '../components/TripCard';
-import { mockTrips } from '../data/mockTrips';
 import { useUIStore } from '../store/uiStore';
 import { useTrips } from '../hooks/useTrips';
 import { useRoutes } from '../hooks/useRotes';
@@ -16,14 +15,12 @@ function Dashboard() {
   const { isTripInfoPanelCollapsed, setSelectedTrip, setTripInfoPanelCollapsed } = useUIStore();
   const search = useSearch({ strict: false });
   const dateStr = (search.date as string) || format(new Date(), 'yyyy-MM-dd');
-
   const { data: routes } = useRoutes();
 
   const { data: trips } = useTrips(
+    dateStr,
     dateStr
   );
-
-  console.log(trips);
 
   return (
     <main className="flex-1 flex flex-col bg-gray-100 min-w-0 overflow-hidden relative">

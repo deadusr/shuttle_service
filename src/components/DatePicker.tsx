@@ -1,6 +1,6 @@
 import { forwardRef } from 'react';
-import { Icon } from '../icons';
-import DatePicker, { registerLocale } from 'react-datepicker';
+import { Icon } from './icons';
+import ReactDatePicker, { registerLocale } from 'react-datepicker';
 import { ru } from 'date-fns/locale/ru';
 import { format, addDays, subDays, startOfWeek, endOfWeek, addWeeks, subWeeks } from 'date-fns';
 import "react-datepicker/dist/react-datepicker.css";
@@ -8,7 +8,7 @@ import "react-datepicker/dist/react-datepicker.css";
 // Register Russian locale for date picker
 registerLocale('ru', ru);
 
-interface DateNavigatorProps {
+interface DatePickerProps {
     date: Date;
     onDateChange: (date: Date) => void;
     mode?: 'day' | 'week';
@@ -36,7 +36,7 @@ const DateTrigger = forwardRef<HTMLDivElement, DateTriggerProps>(({ onClick, lab
 
 DateTrigger.displayName = 'DateTrigger';
 
-const DateNavigator = ({ date, onDateChange, mode = 'day' }: DateNavigatorProps) => {
+const DatePicker = ({ date, onDateChange, mode = 'day' }: DatePickerProps) => {
 
     const handlePrevClick = () => {
         if (mode === 'day') {
@@ -84,7 +84,7 @@ const DateNavigator = ({ date, onDateChange, mode = 'day' }: DateNavigatorProps)
             </button>
 
             <div className={`relative tailwind-datepicker ${mode === 'week' ? 'mode-week' : 'mode-single'}`}>
-                <DatePicker
+                <ReactDatePicker
                     selected={date}
                     onChange={(date: Date | null) => date && onDateChange(date)}
                     locale="ru"
@@ -107,4 +107,4 @@ const DateNavigator = ({ date, onDateChange, mode = 'day' }: DateNavigatorProps)
     );
 };
 
-export default DateNavigator;
+export default DatePicker;

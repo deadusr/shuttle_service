@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Icon } from './icons';
-import DateNavigator from './datenavigator/DateNavigator';
+import DatePicker from './DatePicker';
 
 interface DashboardHeaderProps {
     onSearch?: (query: string) => void;
@@ -39,7 +39,7 @@ const DashboardHeader = ({ onSearch, date, onDateChange, mode = 'day', onViewCha
             </div>
 
             {/* Date Navigator */}
-            <DateNavigator date={date} onDateChange={onDateChange} mode={mode} />
+            <DatePicker date={date} onDateChange={onDateChange} mode={mode} />
 
             {/* View Switcher */}
             <div className="flex items-center p-1 bg-white rounded-2xl shadow-[0_2px_8px_-2px_rgba(0,0,0,0.04)] ring-1 ring-gray-100">
