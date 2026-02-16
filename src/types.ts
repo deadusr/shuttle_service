@@ -39,11 +39,13 @@ export interface Route {
     id: string;
     name: string;
     from: {
+        id: string;
         name: string;
         shortName: string;
         color: string;
     }
     to: {
+        id: string;
         name: string;
         shortName: string;
         color: string;

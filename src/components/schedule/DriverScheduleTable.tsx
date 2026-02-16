@@ -70,6 +70,7 @@ const DriverScheduleTable = ({ startDate = new Date() }: DriverScheduleTableProp
                                                     <span className="text-xs text-gray-600 text-center">6:00 ~ 14:00</span>
                                                     <TripBlocks date={dateKey}
                                                         trips={tripsByDriver[driver.id].filter((trip) => format(trip.departure, 'yyyy-MM-dd') === dateKey)}
+                                                        driver={driver}
                                                     />
                                                 </div>
                                             </td>
