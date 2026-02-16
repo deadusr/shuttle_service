@@ -37,7 +37,7 @@ export const groupTrips = (trips: Trip[]): TripGroup[] => {
     return groups;
 };
 
-export const getRecommendedTrips = (driver: Driver, driverTrips: Trip[], unassignedTrips: UnassignedTrip[]): UnassignedTrip[] => {
+export const getDriverAvailability = (driver: Driver, driverTrips: Trip[]) => {
     // Sort driver's trips by departure time to find the last one
     const sortedDriverTrips = [...driverTrips].sort((a, b) => a.departure.getTime() - b.departure.getTime());
     const lastTrip = sortedDriverTrips[sortedDriverTrips.length - 1];
@@ -50,6 +50,12 @@ export const getRecommendedTrips = (driver: Driver, driverTrips: Trip[], unassig
         // Available after arrival (departure + duration) + rest
         availableTime = new Date(lastTrip.departure.getTime() + TRIP_DURATION + HOURS_OF_REST);
     }
+
+    return { currentCityId, availableTime };
+};
+
+export const getRecommendedTrips = (driver: Driver, driverTrips: Trip[], unassignedTrips: UnassignedTrip[]): UnassignedTrip[] => {
+    const { currentCityId, availableTime } = getDriverAvailability(driver, driverTrips);
 
     return unassignedTrips.filter(trip => {
         const fromCityId = trip.route.from.id;
@@ -61,18 +67,7 @@ export const getRecommendedTrips = (driver: Driver, driverTrips: Trip[], unassig
 };
 
 export const checkTripAssignment = (driver: Driver, driverTrips: Trip[], newTrip: UnassignedTrip): boolean => {
-    // Sort driver's trips by departure time to find the last one
-    const sortedDriverTrips = [...driverTrips].sort((a, b) => a.departure.getTime() - b.departure.getTime());
-    const lastTrip = sortedDriverTrips[sortedDriverTrips.length - 1];
-
-    let currentCityId = driver.homeCityId;
-    let availableTime = new Date(0); // Start availablity from beginning if no trips
-
-    if (lastTrip) {
-        currentCityId = lastTrip.route.to.id;
-        // Available after arrival (departure + duration) + rest
-        availableTime = new Date(lastTrip.departure.getTime() + TRIP_DURATION + HOURS_OF_REST);
-    }
+    const { currentCityId, availableTime } = getDriverAvailability(driver, driverTrips);
 
     const fromCityId = newTrip.route.from.id;
     const isCorrectCity = fromCityId === currentCityId;

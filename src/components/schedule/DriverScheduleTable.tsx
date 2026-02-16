@@ -1,10 +1,10 @@
 import { useMemo } from 'react';
 import { useDrivers } from '../../hooks/useDrivers';
-import { useTrips } from '../../hooks/useTrips';
+import { useTrips, useUnassignedTrips } from '../../hooks/useTrips';
 import { TripBlocks } from './Trips';
 import { format, startOfWeek, addDays, addMilliseconds } from 'date-fns';
 import { ru } from 'date-fns/locale/ru';
-import { Trip } from '../../types';
+import { Trip, UnassignedTrip } from '../../types';
 import { TRIP_DURATION } from '../../utils/tripUtils';
 
 interface DriverScheduleTableProps {
@@ -13,7 +13,9 @@ interface DriverScheduleTableProps {
 
 const DriverScheduleTable = ({ startDate = new Date() }: DriverScheduleTableProps) => {
     const { data: drivers } = useDrivers();
-    const { data: trips } = useTrips(startDate.toISOString(), addDays(startDate, 6).toISOString());
+    const endDate = addDays(startDate, 6);
+    const { data: trips } = useTrips(startDate.toISOString(), endDate.toISOString());
+    const { data: unassignedTrips } = useUnassignedTrips(startDate.toISOString(), endDate.toISOString());
 
     // Calculate week days based on the selected date
     const start = startOfWeek(startDate, { weekStartsOn: 1 });
@@ -25,6 +27,7 @@ const DriverScheduleTable = ({ startDate = new Date() }: DriverScheduleTableProp
             days: Record<string, {
                 trips: Trip[];
                 workingHours: string;
+                unassignedTrips: UnassignedTrip[];
             }>
         }> = {};
 
@@ -39,24 +42,48 @@ const DriverScheduleTable = ({ startDate = new Date() }: DriverScheduleTableProp
                 const dateKey = format(day, 'yyyy-MM-dd');
                 data[driver.id].days[dateKey] = {
                     trips: [],
-                    workingHours: ''
+                    workingHours: '',
+                    unassignedTrips: []
                 };
             });
         });
 
-        if (!trips) return data;
+        if (trips) {
+            // Populate with trips
+            trips.forEach(trip => {
+                if (!trip.driver.id || !data[trip.driver.id]) return;
 
-        // Populate with trips
-        trips.forEach(trip => {
-            if (!trip.driver.id || !data[trip.driver.id]) return;
+                const dateKey = format(trip.departure, 'yyyy-MM-dd');
+                // Only add if date is within range (though useTrips should already filter, safety check)
+                if (data[trip.driver.id]?.days[dateKey]) {
+                    data[trip.driver.id].days[dateKey].trips.push(trip);
+                    data[trip.driver.id].totalTrips++;
+                }
+            });
+        }
 
-            const dateKey = format(trip.departure, 'yyyy-MM-dd');
-            // Only add if date is within range (though useTrips should already filter, safety check)
-            if (data[trip.driver.id].days[dateKey]) {
-                data[trip.driver.id].days[dateKey].trips.push(trip);
-                data[trip.driver.id].totalTrips++;
-            }
-        });
+        // Distribute unassigned trips by date
+        if (drivers && unassignedTrips) {
+            // Create a map of unassigned trips by date for faster access
+            const unassignedByDate: Record<string, UnassignedTrip[]> = {};
+            unassignedTrips.forEach(trip => {
+                const dateKey = format(trip.departure, 'yyyy-MM-dd');
+                if (!unassignedByDate[dateKey]) {
+                    unassignedByDate[dateKey] = [];
+                }
+                unassignedByDate[dateKey].push(trip);
+            });
+
+            // Assign to each driver's day slot (same pool for all drivers on that day)
+            drivers.forEach(driver => {
+                weekDays.forEach(day => {
+                    const dateKey = format(day, 'yyyy-MM-dd');
+                    if (data[driver.id]?.days[dateKey] && unassignedByDate[dateKey]) {
+                        data[driver.id].days[dateKey].unassignedTrips = unassignedByDate[dateKey];
+                    }
+                });
+            });
+        }
 
         // Calculate working hours and sort trips for each day
         Object.values(data).forEach(driverData => {
@@ -73,7 +100,7 @@ const DriverScheduleTable = ({ startDate = new Date() }: DriverScheduleTableProp
         });
 
         return data;
-    }, [drivers, trips, weekDays]);
+    }, [drivers, trips, unassignedTrips, weekDays]);
 
     return (
         <div className="flex-1 overflow-auto p-6 scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-transparent">
@@ -124,6 +151,7 @@ const DriverScheduleTable = ({ startDate = new Date() }: DriverScheduleTableProp
                                                         <TripBlocks date={dateKey}
                                                             trips={dayData?.trips || []}
                                                             driver={driver}
+                                                            unassignedTrips={dayData?.unassignedTrips || []}
                                                         />
                                                     </div>
                                                 </td>

@@ -30,3 +30,11 @@ export const useUIStore = create<UIState>((set) => ({
     draggedTripId: null,
     setDraggedTripId: (id) => set({ draggedTripId: id }),
 }));
+
+export const LAYOUT_SIZES = {
+    SIDEBAR_WIDTH: '72px',
+    TRIP_PANEL_COLLAPSED: '64px',
+    TRIP_PANEL_EXPANDED: '472px',
+    UNASSIGNED_PANEL_COLLAPSED: '64px',
+    UNASSIGNED_PANEL_EXPANDED: '380px',
+} as const;

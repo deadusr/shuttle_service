@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { Trip, Driver } from '../../types';
-import { useUnassignedTrips, useUpdateTrip } from '../../hooks/useTrips';
+import { Trip, Driver, UnassignedTrip } from '../../types';
+import { useUpdateTrip } from '../../hooks/useTrips';
 import { Icon } from '../icons';
 import { getRecommendedTrips, groupTrips } from '../../utils/tripUtils';
 
@@ -13,12 +13,12 @@ interface TripBlocksProps {
     trips: Trip[];
     date: string;
     driver: Driver;
+    unassignedTrips: UnassignedTrip[];
 }
 
-export const TripBlocks = ({ trips, date, driver }: TripBlocksProps) => {
+export const TripBlocks = ({ trips, date, driver, unassignedTrips }: TripBlocksProps) => {
     const [showRecommendedTrips, setShowRecommendedTrips] = useState(false);
 
-    const { data: unassignedTrips } = useUnassignedTrips(date, date);
     const recommended = unassignedTrips ? getRecommendedTrips(driver, trips, unassignedTrips) : [];
 
     const updateTrip = useUpdateTrip();

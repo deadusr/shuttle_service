@@ -26,6 +26,7 @@ export const DroppableDriverDay = ({
         data: {
             driver,
             currentTrips,
+            date,
             type: 'driver-day-zone'
         }
     });
@@ -40,6 +41,7 @@ export const DroppableDriverDay = ({
         const tripDate = format(draggedTrip.departure, 'yyyy-MM-dd');
 
         if (tripDate === date) {
+            // TODO: Ideally use date-fns comparisons instead of string comparison for robustness
             isCompatible = checkTripAssignment(driver, currentTrips, draggedTrip);
         }
     }
