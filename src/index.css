@@ -17,3 +17,135 @@
         display: none;
     }
 }
+
+
+/* DatePickerStyles.css */
+
+/* 1. Основной контейнер календаря */
+.tailwind-datepicker .react-datepicker {
+    @apply border border-gray-200 rounded-xl shadow-xl font-sans bg-white mt-4;
+    font-family: inherit;
+}
+
+/* 2. Хедер (Месяц и год) */
+.tailwind-datepicker .react-datepicker__header {
+    @apply bg-white border-b border-gray-100 pt-4 pb-2 rounded-t-xl;
+}
+
+.tailwind-datepicker .react-datepicker__current-month {
+    @apply text-gray-800 font-bold text-sm mb-2 capitalize;
+}
+
+.tailwind-datepicker .react-datepicker__month {
+    @apply p-3;
+}
+
+.tailwind-datepicker .react-datepicker__weekPicker {
+    @apply mx-0;
+}
+
+.tailwind-datepicker .react-datepicker__day-name {
+    @apply text-gray-400 font-medium w-10 uppercase text-xs;
+}
+
+/* 3. Сетка дней */
+.tailwind-datepicker .react-datepicker__day {
+    @apply w-10 h-10 leading-10 m-0 rounded-full font-medium text-gray-700 transition-colors duration-200;
+}
+
+.tailwind-datepicker .react-datepicker__day-name {
+    @apply mx-0;
+}
+
+
+/* ЗАДАЧА 1: Разделение месяцев (Outside Month)
+   Делаем дни соседнего месяца бледными */
+.tailwind-datepicker .react-datepicker__day--outside-month {
+    @apply text-gray-300;
+    /* pointer-events-none запретит кликать на них */
+}
+
+
+/* =========================================
+   2. РЕЖИМ "ОДИН ДЕНЬ" (mode-single)
+   ========================================= */
+
+/* В этом режиме дни всегда круглые */
+.mode-single .react-datepicker__day {
+    @apply rounded-full;
+}
+
+/* Ховер только на один день */
+.mode-single .react-datepicker__day:not(.react-datepicker__day--selected):hover {
+    @apply bg-blue-50 text-blue-500 rounded-full;
+}
+
+/* Выбранный день - синий круг */
+.mode-single .react-datepicker__day--selected {
+    @apply bg-blue-500 text-white shadow-md shadow-blue-100;
+}
+
+
+/* ЗАДАЧА 2: Подсветка ВСЕЙ недели при наведении (Week Hover)
+   Логика: Когда мы наводим мышь на ряд (week), красим всех детей (day) внутри */
+.tailwind-datepicker.mode-week .react-datepicker__week:hover .react-datepicker__day {
+    @apply bg-blue-50/75 text-blue-600 rounded-none;
+}
+
+.tailwind-datepicker.mode-week .react-datepicker__week:hover .react-datepicker__day--selected {
+    @apply bg-blue-400 text-white rounded-none;
+}
+
+/* Скругляем края у первого и последнего дня при наведении на неделю, чтобы было красиво */
+.tailwind-datepicker.mode-week .react-datepicker__week:hover .react-datepicker__day:first-child {
+    @apply rounded-l-full;
+}
+
+.tailwind-datepicker.mode-week .react-datepicker__week:hover .react-datepicker__day:last-child {
+    @apply rounded-r-full;
+}
+
+.tailwind-datepicker.mode-single .react-datepicker__day--today:not(.react-datepicker__day--selected) {
+    @apply font-black text-blue-500;
+}
+
+.tailwind-datepicker.mode-single .react-datepicker__day--selected:hover {
+    @apply bg-blue-400 rounded-full;
+}
+
+
+
+
+
+/* Стиль для ВЫБРАННОЙ даты/недели (Selected) */
+.tailwind-datepicker.mode-week .react-datepicker__day--selected,
+.tailwind-datepicker.mode-week .react-datepicker__day--keyboard-selected,
+.tailwind-datepicker.mode-week .react-datepicker__day--in-range,
+.tailwind-datepicker.mode-week .react-datepicker__day--in-selecting-range {
+    @apply bg-blue-500 text-white shadow-md;
+}
+
+/* Специфика для режима выбора недели: 
+   Чтобы выбранная неделя выглядела как полоска, а не отдельные круги */
+.tailwind-datepicker.mode-week .react-datepicker__week .react-datepicker__day--selected,
+.tailwind-datepicker.mode-week .react-datepicker__week .react-datepicker__day--keyboard-selected {
+    @apply rounded-none;
+}
+
+.tailwind-datepicker.mode-week .react-datepicker__week .react-datepicker__day--selected:first-child {
+    @apply rounded-l-full;
+}
+
+.tailwind-datepicker.mode-week .react-datepicker__week .react-datepicker__day--selected:last-child {
+    @apply rounded-r-full;
+}
+
+/* Убираем синюю обводку фокуса, которая всех бесит */
+.tailwind-datepicker .react-datepicker__day:focus {
+    @apply outline-none;
+}
+
+/* Стрелочки навигации (Custom Navigation) */
+.tailwind-datepicker .react-datepicker__navigation {
+    @apply top-4;
+}

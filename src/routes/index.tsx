@@ -1,9 +1,10 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, useSearch } from '@tanstack/react-router'
 import TripCard from '../components/TripCard';
 import { mockTrips } from '../data/mockTrips';
 import { useUIStore } from '../store/uiStore';
 import { useTrips } from '../hooks/useTrips';
 import { useRoutes } from '../hooks/useRotes';
+import { format } from 'date-fns';
 
 export const Route = createFileRoute('/')({
   component: Dashboard,
@@ -16,11 +17,13 @@ function Dashboard() {
   // Filter trips by direction
   const outboundTrips = mockTrips.filter(t => t.route.from === 'БОР' && t.route.to === 'СПБ');
   const inboundTrips = mockTrips.filter(t => t.route.from === 'СПБ' && t.route.to === 'БОР');
+  const search = useSearch({ strict: false });
+  const dateStr = (search.date as string) || format(new Date(), 'yyyy-MM-dd');
 
   const { data: routes } = useRoutes();
 
   const { data: trips } = useTrips(
-    '2026-02-16'
+    dateStr
   );
 
   console.log(trips);

@@ -1,4 +1,4 @@
-import { Outlet, createRootRoute, useNavigate, useRouterState } from '@tanstack/react-router'
+import { Outlet, createRootRoute, useNavigate, useRouterState, useSearch } from '@tanstack/react-router'
 import { useEffect } from 'react'
 import { pb } from '../lib/pocketbase'
 import { useAuthStore } from '../store/authStore'
@@ -7,9 +7,19 @@ import Sidebar from '../components/Sidebar'
 import TripInfoPanel from '../components/TripInfoPanel'
 import UnassignedTripsPanel from '../components/schedule/UnassignedTripsPanel'
 import DashboardHeader from '../components/DashboardHeader'
+import { format } from 'date-fns'
+
+interface RootSearch {
+    date?: string
+}
 
 export const Route = createRootRoute({
     component: RootComponent,
+    validateSearch: (search: Record<string, unknown>): RootSearch => {
+        return {
+            date: typeof search.date === 'string' ? search.date : undefined,
+        }
+    },
 })
 
 function RootComponent() {
@@ -17,9 +27,24 @@ function RootComponent() {
     const isAuthenticated = useAuthStore((s) => s.isAuthenticated)
     const router = useRouterState()
     const navigate = useNavigate()
+    const search = useSearch({ from: Route.id })
+
+    const date = search.date ? new Date(search.date) : new Date()
 
     const isLoginPage = router.location.pathname === '/login'
     const isDriversPage = router.location.pathname === '/drivers' || router.location.pathname.startsWith('/drivers/')
+
+    const mode = isDriversPage ? 'week' : 'day'
+
+    const handleDateChange = (newDate: Date) => {
+        navigate({
+            to: '.',
+            search: (old: RootSearch) => ({
+                ...old,
+                date: format(newDate, 'yyyy-MM-dd'),
+            }),
+        })
+    }
 
     // Redirect to /login if not authenticated
     useEffect(() => {
@@ -52,7 +77,11 @@ function RootComponent() {
                     marginRight
                 }}
             >
-                <DashboardHeader />
+                <DashboardHeader
+                    date={date}
+                    onDateChange={handleDateChange}
+                    mode={mode}
+                />
                 <Outlet />
             </div>
             {isDriversPage ? <UnassignedTripsPanel /> : <TripInfoPanel />}

@@ -1,13 +1,16 @@
 import { useState } from 'react';
 import { Icon } from './icons';
+import DateNavigator from './datenavigator/DateNavigator';
 
 interface DashboardHeaderProps {
     onSearch?: (query: string) => void;
-    onDateChange?: (date: Date) => void;
+    date: Date;
+    onDateChange: (date: Date) => void;
+    mode?: 'day' | 'week';
     onViewChange?: (view: 'list' | 'car') => void;
 }
 
-const DashboardHeader = ({ onSearch, onDateChange, onViewChange }: DashboardHeaderProps) => {
+const DashboardHeader = ({ onSearch, date, onDateChange, mode = 'day', onViewChange }: DashboardHeaderProps) => {
     const [view, setView] = useState<'list' | 'car'>('list');
     const [searchQuery, setSearchQuery] = useState('');
 
@@ -36,28 +39,7 @@ const DashboardHeader = ({ onSearch, onDateChange, onViewChange }: DashboardHead
             </div>
 
             {/* Date Navigator */}
-            <div className="flex items-center gap-1.5 bg-white p-1.5 rounded-2xl shadow-[0_2px_8px_-2px_rgba(0,0,0,0.04)] ring-1 ring-gray-100">
-                <button
-                    onClick={() => onDateChange?.(new Date())}
-                    className="w-9 h-9 flex items-center justify-center rounded-xl hover:bg-gray-50 text-gray-400 hover:text-gray-700 transition-all active:scale-95"
-                    title="Предыдущий день"
-                >
-                    <Icon name="chevron" className="w-[18px] h-[18px] rotate-90" />
-                </button>
-
-                <div className="flex items-center gap-2.5 px-4 py-1.5 cursor-pointer hover:bg-gray-50 rounded-xl transition-colors group">
-                    <span className="text-[15px] font-semibold text-gray-900 tracking-tight">Четверг, 12 февраля</span>
-                    <Icon name="calendar" className="w-4 h-4 text-gray-400 group-hover:text-direction-forward transition-colors" />
-                </div>
-
-                <button
-                    onClick={() => onDateChange?.(new Date())}
-                    className="w-9 h-9 flex items-center justify-center rounded-xl hover:bg-gray-50 text-gray-400 hover:text-gray-700 transition-all active:scale-95"
-                    title="Следующий день"
-                >
-                    <Icon name="chevron" className="w-[18px] h-[18px] -rotate-90" />
-                </button>
-            </div>
+            <DateNavigator date={date} onDateChange={onDateChange} mode={mode} />
 
             {/* View Switcher */}
             <div className="flex items-center p-1 bg-white rounded-2xl shadow-[0_2px_8px_-2px_rgba(0,0,0,0.04)] ring-1 ring-gray-100">

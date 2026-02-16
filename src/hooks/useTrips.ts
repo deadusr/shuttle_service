@@ -3,22 +3,40 @@ import { pb } from '../lib/pocketbase';
 
 
 // Trip is now imported from ../types
-import { Trip } from '../types';
+import { Trip, UnassignedTrip } from '../types';
 
 interface TripExpand {
     driver?: {
+        id: string;
         name: string;
         phone: string;
+        home_city: string;
     };
     car?: {
+        id: string;
         name: string; // Часто поле называется title или model/name, уточните в вашей схеме
         plate: string;
     };
     route?: {
         id: string;
-        from: string;
-        to: string;
+        name: string;
+        expand?: RouteExpand
+    }
+}
+
+interface RouteExpand {
+    from: {
+        id: string;
+        name: string;
+        short_name: string;
+        color: string;
     };
+    to: {
+        id: string;
+        name: string;
+        short_name: string;
+        color: string;
+    }
 }
 
 interface TripResponse {
@@ -35,24 +53,29 @@ interface TripResponse {
 }
 
 
-export const useTrips = (date: string) => {
+export const useTrips = (startDate: string, endDate?: string) => {
     return useQuery<Trip[]>({
-        queryKey: ['trips', date],
+        queryKey: ['trips', startDate, endDate],
         queryFn: async () => {
             // PocketBase сам применит правило organization = @request.auth.organization
             const records = await pb.collection('trips').getList<TripResponse>(1, 50, {
-                filter: `departure_date >= "${date} 00:00:00"`,
+                filter: `departure_date >= "${startDate} 00:00:00"${endDate ? ` && departure_date <= "${endDate} 23:59:59"` : ''}`,
                 sort: 'departure_date',
-                expand: 'driver,car,route',
+                expand: 'driver,car,route,route.from,route.to',
             });
+
+            console.log(records.items.filter((trip) => trip.expand?.driver?.id));
 
             return records.items.map((trip) => ({
                 id: trip.id,
                 driver: {
+                    id: trip.expand?.driver?.id || '',
                     name: trip.expand?.driver?.name || 'Неизвестно',
                     phone: trip.expand?.driver?.phone || '',
+                    homeCityId: trip.expand?.driver?.home_city || '',
                 },
                 car: {
+                    id: trip.expand?.car?.id || '',
                     name: trip.expand?.car?.name || 'Неизвестно', // title часто дефолтное поле в PB
                     plate: trip.expand?.car?.plate || '',
                 },
@@ -64,23 +87,64 @@ export const useTrips = (date: string) => {
                 statusLabel: trip.status_label,
                 routeId: trip.expand?.route?.id || '',
                 route: {
-                    from: trip.expand?.route?.from || '',
-                    to: trip.expand?.route?.to || '',
-                },
+                    id: trip.expand?.route?.id || '',
+                    name: trip.expand?.route?.name || '',
+                    from: {
+                        id: trip.expand?.route?.expand?.from.id || '',
+                        name: trip.expand?.route?.expand?.from.name || '',
+                        shortName: trip.expand?.route?.expand?.from.short_name || '',
+                        color: trip.expand?.route?.expand?.from.color || '',
+                    },
+                    to: {
+                        id: trip.expand?.route?.expand?.to.id || '',
+                        name: trip.expand?.route?.expand?.to.name || '',
+                        shortName: trip.expand?.route?.expand?.to.short_name || '',
+                        color: trip.expand?.route?.expand?.to.color || '',
+                    }
+                }
             }));
         },
     });
 };
 
-export const useUnassignTrip = () => {
-    const queryClient = useQueryClient();
 
-    return useMutation({
-        mutationFn: async (tripId: string) => {
-            await pb.collection('trips').update(tripId, { driver: null });
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['trips'] });
+
+export const useUnassignedTrips = (startDate: string, endDate?: string) => {
+    return useQuery<UnassignedTrip[]>({
+        queryKey: ['unassigned-trips', startDate, endDate],
+        queryFn: async () => {
+            const records = await pb.collection('trips').getList<TripResponse>(1, 50, {
+                filter: `driver = "" && departure_date >= "${startDate} 00:00:00"${endDate ? ` && departure_date <= "${endDate} 23:59:59"` : ''}`,
+                sort: 'departure_date',
+                expand: 'route,route.from,route.to',
+            });
+
+            return records.items.map((trip) => ({
+                id: trip.id,
+                maxSeats: trip.max_seats,
+                bookedSeats: trip.booked_seats,
+                price: trip.price,
+                status: trip.status,
+                departure: new Date(trip.departure_date),
+                statusLabel: trip.status_label,
+                routeId: trip.expand?.route?.id || '',
+                route: {
+                    id: trip.expand?.route?.id || '',
+                    name: trip.expand?.route?.name || '',
+                    from: {
+                        id: trip.expand?.route?.expand?.from.id || '',
+                        name: trip.expand?.route?.expand?.from.name || '',
+                        shortName: trip.expand?.route?.expand?.from.short_name || '',
+                        color: trip.expand?.route?.expand?.from.color || '',
+                    },
+                    to: {
+                        id: trip.expand?.route?.expand?.to.id || '',
+                        name: trip.expand?.route?.expand?.to.name || '',
+                        shortName: trip.expand?.route?.expand?.to.short_name || '',
+                        color: trip.expand?.route?.expand?.to.color || '',
+                    }
+                }
+            }));
         },
     });
 };
@@ -100,7 +164,7 @@ export const useCreateTrip = () => {
         },
         onSuccess: () => {
             // Обновляем список без перезагрузки страницы
-            queryClient.invalidateQueries({ queryKey: ['trips'] });
+            queryClient.invalidateQueries({ queryKey: ['trips', 'unassigned-trips'] });
         },
     });
 };

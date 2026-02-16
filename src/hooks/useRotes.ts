@@ -1,24 +1,22 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { pb } from '../lib/pocketbase';
+import { Route } from '../types';
 
-interface Route {
+export interface RouteResponse {
     id: string;
     name: string;
-    from: string;
-    to: string;
-    price: number;
-    bookingWindow: number;
-    uiColor: string;
-}
-
-interface RouteResponse {
-    id: string;
-    name: string;
-    from: string;
-    to: string;
     price: number;
     booking_window: number;
-    ui_color: string;
+    from: {
+        name: string;
+        short_name: string;
+        color: string;
+    }
+    to: {
+        name: string;
+        short_name: string;
+        color: string;
+    }
 }
 
 
@@ -29,16 +27,24 @@ export const useRoutes = () => {
             // PocketBase сам применит правило organization = @request.auth.organization
             const records = await pb.collection('routes').getList<RouteResponse>(1, 50, {
                 sort: "-order",
+                expand: 'from,to',
             });
 
             return records.items.map((route) => ({
                 id: route.id,
                 name: route.name,
-                from: route.from,
-                to: route.to,
+                from: {
+                    name: route.from.name,
+                    shortName: route.from.short_name,
+                    color: route.from.color,
+                },
+                to: {
+                    name: route.to.name,
+                    shortName: route.to.short_name,
+                    color: route.to.color,
+                },
                 price: route.price,
                 bookingWindow: route.booking_window,
-                uiColor: route.ui_color,
             }));
         },
     });

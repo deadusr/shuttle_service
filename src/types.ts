@@ -20,16 +20,41 @@ export interface Trip {
     price: number;
     statusLabel: string;
     routeId: string;
-    route: {
-        from: string;
-        to: string;
-    };
+    route: Route;
+}
+
+export interface UnassignedTrip {
+    id: string;
+    maxSeats: number;
+    bookedSeats: number;
+    departure: Date;
+    status: 'en-route' | 'scheduled' | 'finished';
+    price: number;
+    statusLabel: string;
+    routeId: string;
+    route: Route
+}
+
+export interface Route {
+    id: string;
+    name: string;
+    from: {
+        name: string;
+        shortName: string;
+        color: string;
+    }
+    to: {
+        name: string;
+        shortName: string;
+        color: string;
+    }
 }
 
 export interface Driver {
     id: string;
     name: string;
     phone: string;
+    homeCityId: string;
 }
 
 export interface Car {

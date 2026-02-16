@@ -1,11 +1,36 @@
-import { mockDrivers } from '../../data/mockData';
+import { useMemo } from 'react';
 import { useDrivers } from '../../hooks/useDrivers';
-import { FullTrip, ShortTrip, EmptyTrip } from './TripBlocks';
+import { useTrips } from '../../hooks/useTrips';
+import { TripBlocks } from './Trips';
+import { format, startOfWeek, addDays } from 'date-fns';
+import { ru } from 'date-fns/locale/ru';
+import { Trip } from '../../types';
 
-const days = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье'];
+interface DriverScheduleTableProps {
+    startDate?: Date;
+}
 
-const DriverScheduleTable = () => {
+const DriverScheduleTable = ({ startDate = new Date() }: DriverScheduleTableProps) => {
     const { data: drivers } = useDrivers();
+    const { data: trips } = useTrips(startDate.toISOString(), addDays(startDate, 6).toISOString());
+    console.log(trips);
+
+    const assignTrips = useMemo(() => {
+        return trips?.filter((trip) => trip.driver.id) || [];
+    }, [trips]);
+
+    const tripsByDriver = useMemo(() => {
+        return drivers?.reduce((acc, driver) => {
+            const driverTrips = assignTrips?.filter((trip) => trip.driver.id === driver.id) || [];
+            acc[driver.id] = driverTrips;
+            return acc;
+        }, {} as Record<string, Trip[]>) || {};
+    }, [drivers, trips]);
+
+    // Calculate week days based on the selected date
+    const start = startOfWeek(startDate, { weekStartsOn: 1 });
+    const weekDays = Array.from({ length: 7 }).map((_, i) => addDays(start, i));
+
     return (
         <div className="flex-1 overflow-auto p-6 scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-transparent">
             <div className=" overflow-hidden flex flex-col h-full">
@@ -16,12 +41,13 @@ const DriverScheduleTable = () => {
                                 <th className="p-4 text-left text-sm font-normal text-gray-600 w-64 min-w-64 sticky left-0 bg-gray-50 z-20 border-r border-gray-200">
                                     Водитель
                                 </th>
-                                {days.map((day) => (
+                                {weekDays.map((day) => (
                                     <th
-                                        key={day}
+                                        key={day.toISOString()}
                                         className="p-4 text-center text-sm font-normal text-gray-600 w-[184px] min-w-[184px] border-r border-gray-200 last:border-r-0"
                                     >
-                                        {day}
+                                        <div className="capitalize">{format(day, 'EEEE', { locale: ru })}</div>
+                                        <div className="text-xs text-gray-400 mt-1">{format(day, 'd MMM', { locale: ru })}</div>
                                     </th>
                                 ))}
                             </tr>
@@ -32,18 +58,23 @@ const DriverScheduleTable = () => {
                                     <td className="p-4 text-sm font-medium text-gray-900 sticky left-0  z-10 border-r border-gray-200 bg-white">
                                         {driver.name}
                                     </td>
-                                    {days.map((day) => (
-                                        <td
-                                            key={day}
-                                            className="border-r border-gray-200 last:border-r-0 w-[184px] min-w-[184px] h-24 align-top"
-                                        >
-                                            <div className="flex flex-col gap-4 px-3 pt-2 pb-6">
-                                                <span className="text-xs text-gray-600 text-center">6:00 ~ 14:00</span>
-                                                {/* {driver.trips.length === 2 ? <FullTrip /> : driver.trips.length === 1 ? <ShortTrip /> : <EmptyTrip />} */}
-                                                <EmptyTrip />
-                                            </div>
-                                        </td>
-                                    ))}
+
+                                    {weekDays.map((day) => {
+                                        const dateKey = format(day, 'yyyy-MM-dd');
+                                        return (
+                                            <td
+                                                key={day.toISOString()}
+                                                className="border-r border-gray-200 last:border-r-0 w-[184px] min-w-[184px] h-24 align-top"
+                                            >
+                                                <div className="flex flex-col gap-4 px-3 pt-2 pb-6">
+                                                    <span className="text-xs text-gray-600 text-center">6:00 ~ 14:00</span>
+                                                    <TripBlocks date={dateKey}
+                                                        trips={tripsByDriver[driver.id].filter((trip) => format(trip.departure, 'yyyy-MM-dd') === dateKey)}
+                                                    />
+                                                </div>
+                                            </td>
+                                        );
+                                    })}
                                 </tr>
                             ))}
                         </tbody>

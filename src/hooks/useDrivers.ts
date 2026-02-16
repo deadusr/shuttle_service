@@ -8,6 +8,7 @@ interface DriverResponse {
     id: string;
     name: string;
     phone: string;
+    home_city: string;
 }
 
 
@@ -23,6 +24,7 @@ export const useDrivers = () => {
                 id: driver.id,
                 name: driver.name,
                 phone: driver.phone,
+                homeCityId: driver.home_city,
             }));
         },
     });
