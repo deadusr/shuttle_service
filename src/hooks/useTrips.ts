@@ -29,13 +29,13 @@ interface RouteExpand {
         id: string;
         name: string;
         short_name: string;
-        color: string;
+        ui_color: string;
     };
     to: {
         id: string;
         name: string;
         short_name: string;
-        color: string;
+        ui_color: string;
     }
 }
 
@@ -93,13 +93,13 @@ export const useTrips = (startDate: string, endDate?: string) => {
                         id: trip.expand?.route?.expand?.from.id || '',
                         name: trip.expand?.route?.expand?.from.name || '',
                         shortName: trip.expand?.route?.expand?.from.short_name || '',
-                        color: trip.expand?.route?.expand?.from.color || '',
+                        color: trip.expand?.route?.expand?.from.ui_color || '',
                     },
                     to: {
                         id: trip.expand?.route?.expand?.to.id || '',
                         name: trip.expand?.route?.expand?.to.name || '',
                         shortName: trip.expand?.route?.expand?.to.short_name || '',
-                        color: trip.expand?.route?.expand?.to.color || '',
+                        color: trip.expand?.route?.expand?.to.ui_color || '',
                     }
                 }
             }));

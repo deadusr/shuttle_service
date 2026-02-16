@@ -7,15 +7,21 @@ export interface RouteResponse {
     name: string;
     price: number;
     booking_window: number;
+    expand: RouteExpand;
+}
+
+interface RouteExpand {
     from: {
+        id: string;
         name: string;
         short_name: string;
-        color: string;
-    }
+        ui_color: string;
+    };
     to: {
+        id: string;
         name: string;
         short_name: string;
-        color: string;
+        ui_color: string;
     }
 }
 
@@ -34,17 +40,17 @@ export const useRoutes = () => {
                 id: route.id,
                 name: route.name,
                 from: {
-                    name: route.from.name,
-                    shortName: route.from.short_name,
-                    color: route.from.color,
+                    id: route.expand.from.id,
+                    name: route.expand.from.name,
+                    shortName: route.expand.from.short_name,
+                    color: route.expand.from.ui_color,
                 },
                 to: {
-                    name: route.to.name,
-                    shortName: route.to.short_name,
-                    color: route.to.color,
+                    id: route.expand.to.id,
+                    name: route.expand.to.name,
+                    shortName: route.expand.to.short_name,
+                    color: route.expand.to.ui_color,
                 },
-                price: route.price,
-                bookingWindow: route.booking_window,
             }));
         },
     });

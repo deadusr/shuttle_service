@@ -11,7 +11,6 @@ interface TripBlocksProps {
 
 export const TripBlocks = ({ trips, date, driver }: TripBlocksProps) => {
 
-
     return (
         <div className='flex flex-col gap-2'>
             {trips.length > 1
@@ -34,7 +33,7 @@ const FullTrip = ({ tripTo, tripBack, date, driver }: { tripTo: Trip, tripBack: 
                 <div className='flex flex-col gap-1 px-3 pt-3 pb-2 border-b border-dashed border-gray-400'>
                     <div className='flex gap-1 items-center'>
                         <span className='text-base font-medium text-gray-900'>{tripTo.departure.toTimeString().split(' ')[0].slice(0, 5)}</span>
-                        <div className='p-0.5 bg-direction-forward-light text-direction-forward'>
+                        <div style={{ backgroundColor: tripTo.route.to.color + '16', color: tripTo.route.to.color }} className='p-0.5'>
                             <span className='text-base font-medium'>➔ {tripTo.route.to.shortName}</span>
                         </div>
                     </div>
@@ -45,7 +44,7 @@ const FullTrip = ({ tripTo, tripBack, date, driver }: { tripTo: Trip, tripBack: 
                 <div className='flex flex-col gap-1 px-3 pt-3 pb-2'>
                     <div className='flex gap-1 items-center'>
                         <span className='text-base font-medium text-gray-900'>{tripBack.departure.toTimeString().split(' ')[0].slice(0, 5)}</span>
-                        <div className='p-0.5 bg-direction-forward-light text-direction-forward'>
+                        <div style={{ backgroundColor: tripBack.route.to.color + '16', color: tripBack.route.to.color }} className='p-0.5'>
                             <span className='text-base font-medium'> ➔ {tripBack.route.to.shortName}</span>
                         </div>
                     </div>
@@ -75,7 +74,7 @@ export const OneWayTrip = ({ trip, date, driver }: { trip: Trip, date: string, d
                 <div className='flex flex-col gap-1 px-3 pt-3 pb-2'>
                     <div className='flex gap-1 items-center'>
                         <span className='text-base font-medium text-gray-900'>{trip.departure.toTimeString().split(' ')[0].slice(0, 5)}</span>
-                        <div className='p-0.5 bg-direction-forward-light text-direction-forward'>
+                        <div style={{ backgroundColor: trip.route.to.color + '16', color: trip.route.to.color }} className='p-0.5'>
                             <span className='text-base font-medium'> ➔ {trip.route.to.shortName}</span>
                         </div>
                     </div>
@@ -116,7 +115,7 @@ export const RecomendedTrips = ({ trips, maxItems = 4 }: { trips: UnassignedTrip
 }
 
 
-export const TRIP_DURATION = 4 * 60 * 60 * 1000; // 4 hours in milliseconds
+export const TRIP_DURATION = 3 * 60 * 60 * 1000; // 4 hours in milliseconds
 export const HOURS_OF_REST = 1 * 60 * 60 * 1000; // 1 hour in milliseconds
 
 export const getRecommendedTrips = (driver: Driver, driverTrips: Trip[], unassignedTrips: UnassignedTrip[]): UnassignedTrip[] => {

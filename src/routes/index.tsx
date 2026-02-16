@@ -14,9 +14,6 @@ export const Route = createFileRoute('/')({
 
 function Dashboard() {
   const { isTripInfoPanelCollapsed, setSelectedTrip, setTripInfoPanelCollapsed } = useUIStore();
-  // Filter trips by direction
-  const outboundTrips = mockTrips.filter(t => t.route.from === 'БОР' && t.route.to === 'СПБ');
-  const inboundTrips = mockTrips.filter(t => t.route.from === 'СПБ' && t.route.to === 'БОР');
   const search = useSearch({ strict: false });
   const dateStr = (search.date as string) || format(new Date(), 'yyyy-MM-dd');
 
@@ -35,10 +32,10 @@ function Dashboard() {
 
           {
             routes?.map(route => (
-              <div style={{ background: route.uiColor + "11" }} className="max-w-xl w-full flex flex-col gap-4 p-4 rounded-3xl">
+              <div style={{ background: route.from.color + "11" }} className="max-w-xl w-full flex flex-col gap-4 p-4 rounded-3xl">
                 <div className="sticky top-0 z-10 backdrop-blur-sm py-2 rounded-t-xl">
-                  <h2 style={{ color: route.uiColor }} className="text-xl font-medium text-direction-forward flex items-center gap-2">
-                    {route.name}
+                  <h2 style={{ color: route.from.color }} className="text-xl font-medium flex items-center gap-2">
+                    {route.from.shortName} ➔ {route.to.shortName}
                   </h2>
                 </div>
 
