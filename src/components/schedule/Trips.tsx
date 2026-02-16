@@ -7,6 +7,7 @@ import { getRecommendedTrips, groupTrips } from '../../utils/tripUtils';
 import { RoundTripCard } from './cards/RoundTripCard';
 import { OneWayTripCard } from './cards/OneWayTripCard';
 import { RecommendedTrips } from './RecommendedTrips';
+import { DroppableDriverDay } from './DroppableDriverDay';
 
 interface TripBlocksProps {
     trips: Trip[];
@@ -34,11 +35,15 @@ export const TripBlocks = ({ trips, date, driver }: TripBlocksProps) => {
     const hasOnlyRoundTrips = groups.length > 0 && groups.every(g => g.type === 'roundTrip');
 
     if (trips.length === 0) {
-        return <RecommendedTrips trips={recommended} onTripClick={handleAssignTrip} />;
+        return (
+            <DroppableDriverDay driver={driver} date={date} currentTrips={trips} className='h-full'>
+                <RecommendedTrips trips={recommended} onTripClick={handleAssignTrip} />
+            </DroppableDriverDay>
+        );
     }
 
     return (
-        <div className='flex flex-col gap-2'>
+        <DroppableDriverDay driver={driver} date={date} currentTrips={trips} className='flex flex-col gap-2'>
             {groups.map((group) =>
                 group.type === 'roundTrip' ? (
                     <RoundTripCard
@@ -71,6 +76,6 @@ export const TripBlocks = ({ trips, date, driver }: TripBlocksProps) => {
             ) : (
                 <RecommendedTrips trips={recommended} maxItems={3} onTripClick={handleAssignTrip} />
             )}
-        </div>
+        </DroppableDriverDay>
     );
 };

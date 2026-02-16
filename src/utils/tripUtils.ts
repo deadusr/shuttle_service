@@ -59,3 +59,24 @@ export const getRecommendedTrips = (driver: Driver, driverTrips: Trip[], unassig
         return isCorrectCity && isAfterAvailableTime;
     });
 };
+
+export const checkTripAssignment = (driver: Driver, driverTrips: Trip[], newTrip: UnassignedTrip): boolean => {
+    // Sort driver's trips by departure time to find the last one
+    const sortedDriverTrips = [...driverTrips].sort((a, b) => a.departure.getTime() - b.departure.getTime());
+    const lastTrip = sortedDriverTrips[sortedDriverTrips.length - 1];
+
+    let currentCityId = driver.homeCityId;
+    let availableTime = new Date(0); // Start availablity from beginning if no trips
+
+    if (lastTrip) {
+        currentCityId = lastTrip.route.to.id;
+        // Available after arrival (departure + duration) + rest
+        availableTime = new Date(lastTrip.departure.getTime() + TRIP_DURATION + HOURS_OF_REST);
+    }
+
+    const fromCityId = newTrip.route.from.id;
+    const isCorrectCity = fromCityId === currentCityId;
+    const isAfterAvailableTime = newTrip.departure.getTime() >= availableTime.getTime();
+
+    return isCorrectCity && isAfterAvailableTime;
+};

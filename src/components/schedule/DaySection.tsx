@@ -1,7 +1,7 @@
 import { format } from 'date-fns';
 import { ru } from 'date-fns/locale';
 import { Icon } from '../icons';
-import TripChip from '../common/TripChip';
+import { DraggableTripChip } from './cards/DraggableTripChip';
 import { capitalize } from '../../utils/string';
 import type { UnassignedTrip } from '../../types';
 
@@ -50,7 +50,7 @@ const DaySection = ({ dayDate, trips, isExpanded, onToggle, activeTripId, onTrip
                         {Object.entries(tripsByRoute).map(([routeId, routeTrips]) => (
                             <div key={routeId} className="flex flex-col gap-2">
                                 {routeTrips.map(trip => (
-                                    <TripChip
+                                    <DraggableTripChip
                                         key={trip.id}
                                         trip={trip}
                                         isActive={activeTripId === trip.id}
