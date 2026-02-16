@@ -64,8 +64,6 @@ export const useTrips = (startDate: string, endDate?: string) => {
                 expand: 'driver,car,route,route.from,route.to',
             });
 
-            console.log(records.items.filter((trip) => trip.expand?.driver?.id));
-
             return records.items.map((trip) => ({
                 id: trip.id,
                 driver: {
@@ -135,13 +133,13 @@ export const useUnassignedTrips = (startDate: string, endDate?: string) => {
                         id: trip.expand?.route?.expand?.from.id || '',
                         name: trip.expand?.route?.expand?.from.name || '',
                         shortName: trip.expand?.route?.expand?.from.short_name || '',
-                        color: trip.expand?.route?.expand?.from.color || '',
+                        color: trip.expand?.route?.expand?.from.ui_color || '',
                     },
                     to: {
                         id: trip.expand?.route?.expand?.to.id || '',
                         name: trip.expand?.route?.expand?.to.name || '',
                         shortName: trip.expand?.route?.expand?.to.short_name || '',
-                        color: trip.expand?.route?.expand?.to.color || '',
+                        color: trip.expand?.route?.expand?.to.ui_color || '',
                     }
                 }
             }));

@@ -5,41 +5,24 @@ import { useBookings } from '../hooks/useBookings';
 import TripHeader from './trip/TripHeader';
 import DriverCard from './trip/DriverCard';
 import PassengerList from './passenger/PassengerList';
+import SidePanel from './common/SidePanel';
 
 const TripInfoPanel = () => {
     const { isTripInfoPanelCollapsed, toggleTripInfoPanel, selectedTrip } = useUIStore();
     const { data: bookings } = useBookings(selectedTrip?.id || '');
+    console.log(bookings);
     const [isScrolled, setIsScrolled] = useState(false);
 
     const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
         setIsScrolled(e.currentTarget.scrollTop > 40);
     };
 
-    if (isTripInfoPanelCollapsed) {
-        return (
-            <div className="fixed top-0 right-0 h-screen w-16 bg-white border-l border-gray-200 flex flex-col items-center py-4 z-40 transition-all duration-300">
-                <button
-                    onClick={toggleTripInfoPanel}
-                    className="p-2 hover:bg-gray-100 rounded-lg text-gray-500 transition-colors"
-                >
-                    <Icon name="dock-left" className="w-6 h-6 rotate-180" />
-                </button>
-            </div>
-        );
-    }
-
     return (
-        <div className="fixed top-0 right-0 h-screen w-[472px] bg-white border-l border-gray-200 flex flex-col z-40 transition-all duration-300 shadow-xl overflow-hidden font-sans">
-            {/* Header / Collapse Toggle */}
-            <div className="p-4 flex items-center justify-between shrink-0">
-                <button
-                    onClick={toggleTripInfoPanel}
-                    className="p-2 -ml-2 hover:bg-gray-100 rounded-lg text-gray-400 hover:text-gray-600 transition-colors cursor-pointer"
-                >
-                    <Icon name="dock-left" className="w-5 h-5" />
-                </button>
-            </div>
-
+        <SidePanel
+            isCollapsed={isTripInfoPanelCollapsed}
+            onToggle={toggleTripInfoPanel}
+            width="472px"
+        >
             {!selectedTrip ? (
                 <div className="flex-1 flex flex-col items-center justify-center text-gray-400 p-8 text-center">
                     <Icon name="search" className="w-12 h-12 mb-4 opacity-50" />
@@ -54,9 +37,9 @@ const TripInfoPanel = () => {
                                 {selectedTrip.departure.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                             </span>
                             <div className="flex items-center gap-1.5 text-sm font-medium text-direction-forward truncate">
-                                <span className="truncate">{selectedTrip.route.from}</span>
+                                <span className="truncate">{selectedTrip.route.from.shortName}</span>
                                 <span className="shrink-0">→</span>
-                                <span className="truncate">{selectedTrip.route.to}</span>
+                                <span className="truncate">{selectedTrip.route.to.shortName}</span>
                             </div>
                         </div>
                         <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-700 bg-emerald-100 px-2 py-1 rounded-lg shrink-0">
@@ -96,9 +79,8 @@ const TripInfoPanel = () => {
                     </div>
                 </>
             )}
-        </div>
+        </SidePanel>
     );
 };
 
 export default TripInfoPanel;
-

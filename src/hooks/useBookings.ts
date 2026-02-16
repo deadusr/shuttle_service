@@ -24,10 +24,9 @@ interface BookingResponse {
 export const useBookings = (tripId: string) => {
     return useQuery<Booking[]>({
         queryKey: ['bookings', tripId],
-        enabled: !!tripId,
         queryFn: async () => {
             const records = await pb.collection('bookings').getList<BookingResponse>(1, 50, {
-                filter: `trip = '${tripId}'`,
+                filter: `trip="${tripId}"`,
                 expand: 'client',
             });
 

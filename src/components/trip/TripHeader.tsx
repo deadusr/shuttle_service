@@ -1,5 +1,4 @@
 import { Trip } from '../../types';
-import { Icon } from '../icons';
 
 interface TripHeaderProps {
     trip: Trip;
@@ -12,11 +11,10 @@ const TripHeader = ({ trip }: TripHeaderProps) => {
                 <span className="text-xl font-bold text-gray-900">
                     {trip.departure.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                 </span>
-                <div className="flex items-center gap-1.5 text-xl font-medium text-direction-forward">
-                    <span>{trip.route.from}</span>
-                    <Icon name="search" className="w-4 h-4 text-direction-forward/70 rotate-90 hidden" />
+                <div style={{ color: trip.route.to.color }} className="flex items-center gap-1.5 text-xl font-medium">
+                    <span>{trip.route.from.name}</span>
                     <span>→</span>
-                    <span>{trip.route.to}</span>
+                    <span>{trip.route.to.name}</span>
                 </div>
             </div>
 

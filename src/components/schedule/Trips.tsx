@@ -2,6 +2,7 @@ import { Icon } from '../icons';
 import { Trip, UnassignedTrip, Driver } from '../../types';
 import { useUnassignedTrips } from '../../hooks/useTrips';
 import { useState } from 'react';
+import TripChip from '../common/TripChip';
 
 interface TripBlocksProps {
     trips: Trip[];
@@ -106,9 +107,7 @@ export const RecomendedTrips = ({ trips, maxItems = 4 }: { trips: UnassignedTrip
             style={{ maxHeight: trips.length > maxItems ? maxHeight : undefined }}
         >
             {trips.map(trip => (
-                <div className='w-full shrink-0 rounded-full border border-gray-300 border-dashed py-2 text-sm text-center text-gray-300 cursor-pointer hover:border-gray-400 hover:text-gray-400 transition-colors'>
-                    <span className=''>{trip.departure.toTimeString().split(' ')[0].slice(0, 5)} ➔ {trip.route.to.shortName}</span>
-                </div>
+                <TripChip key={trip.id} trip={trip} variant="compact" />
             ))}
         </div>
     )

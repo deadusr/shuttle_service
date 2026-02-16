@@ -84,7 +84,7 @@ function RootComponent() {
                 />
                 <Outlet />
             </div>
-            {isDriversPage ? <UnassignedTripsPanel /> : <TripInfoPanel />}
+            {isDriversPage ? <UnassignedTripsPanel currentDate={date} /> : <TripInfoPanel />}
         </div>
     )
 }
