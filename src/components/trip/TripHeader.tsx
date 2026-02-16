@@ -9,7 +9,9 @@ const TripHeader = ({ trip }: TripHeaderProps) => {
     return (
         <div className="flex flex-col gap-6">
             <div className="flex items-baseline gap-2 mb-2">
-                <span className="text-xl font-bold text-gray-900">{trip.time}</span>
+                <span className="text-xl font-bold text-gray-900">
+                    {trip.departure.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                </span>
                 <div className="flex items-center gap-1.5 text-xl font-medium text-direction-forward">
                     <span>{trip.route.from}</span>
                     <Icon name="search" className="w-4 h-4 text-direction-forward/70 rotate-90 hidden" />

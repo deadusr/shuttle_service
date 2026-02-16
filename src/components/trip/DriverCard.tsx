@@ -1,10 +1,11 @@
 import { Trip } from '../../types';
 
 interface DriverCardProps {
-    driver: Trip['driver'];
+    trip: Trip;
 }
 
-const DriverCard = ({ driver }: DriverCardProps) => {
+const DriverCard = ({ trip }: DriverCardProps) => {
+    const { driver, car } = trip;
     return (
         <div className="bg-white rounded-xl border border-gray-200 p-4">
             <div className="flex items-start gap-3 relative">
@@ -21,22 +22,22 @@ const DriverCard = ({ driver }: DriverCardProps) => {
 
                 <div className="flex flex-col gap-2">
                     <p className="text-sm text-slate-900">
-                        <span className="text-xs">{driver.car}</span> {" "}
-                        <span className="font-bold font-mono">{driver.plate}</span>
+                        <span className="text-xs">{car.name}</span> {" "}
+                        <span className="font-bold font-mono">{car.plate}</span>
                     </p>
                     <div className="flex items-center gap-3">
                         {/* Seats Visualizer */}
                         <div className="flex gap-px h-4">
-                            {Array.from({ length: driver.seatsTotal }).map((_, i) => (
+                            {Array.from({ length: trip.maxSeats }).map((_, i) => (
                                 <div
                                     key={i}
-                                    className={`w-3 h-full rounded-sm first:rounded-l last:rounded-r ${i < driver.seatsOccupied ? 'bg-emerald-500' : 'bg-gray-200'
+                                    className={`w-3 h-full rounded-sm first:rounded-l last:rounded-r ${i < trip.bookedSeats ? 'bg-emerald-500' : 'bg-gray-200'
                                         }`}
                                 />
                             ))}
                         </div>
                         <span className="text-sm font-medium text-slate-900">
-                            {driver.seatsOccupied}/{driver.seatsTotal} мест
+                            {trip.bookedSeats}/{trip.maxSeats} мест
                         </span>
                     </div>
                 </div>

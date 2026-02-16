@@ -1,15 +1,15 @@
-import { Passenger } from '../../types';
+import { Booking } from '../../types';
 import PassengerItem from './PassengerItem';
 
 interface PassengerListProps {
-    passengers: Passenger[];
+    passengers: Booking[];
 }
 
 const PassengerList = ({ passengers }: PassengerListProps) => {
     return (
         <div className="flex flex-col gap-3">
-            {passengers.map((passenger) => (
-                <PassengerItem key={passenger.id} passenger={passenger} />
+            {passengers.map((booking) => (
+                <PassengerItem key={booking.id} booking={booking} />
             ))}
         </div>
     );

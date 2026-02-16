@@ -1,33 +1,39 @@
-export type PassengerStatus = 'confirmed' | 'waiting' | 'cancelled';
-
-export interface Passenger {
+export interface Booking {
     id: string;
-    name: string;
-    phone: string;
-    location: string;
-    seats: number; // e.g. 2
-    seatLabel: string; // e.g. "1A, 1B"
-    status: PassengerStatus;
-    comment?: string;
-    avatar?: string; // URL or initials if not provided
+    client: {
+        name: string;
+        phone: string;
+    };
+    seatsBooked: number;
+    price: number;
+    comments: string;
 }
 
 export interface Trip {
     id: string;
+    driver: Driver;
+    car: Car;
+    maxSeats: number;
+    bookedSeats: number;
+    departure: Date;
+    status: 'en-route' | 'scheduled' | 'finished';
+    price: number;
+    statusLabel: string;
+    routeId: string;
     route: {
         from: string;
         to: string;
     };
-    time: string;
-    status: 'en-route' | 'scheduled' | 'finished';
-    statusLabel: string; // e.g. "В пути", "Выехал 23 минуты назад"
-    driver: {
-        name: string;
-        phone: string;
-        car: string; // "Ford Custom"
-        plate: string; // "o225mc 53"
-        seatsOccupied: number;
-        seatsTotal: number;
-    };
-    passengers: Passenger[];
+}
+
+export interface Driver {
+    id: string;
+    name: string;
+    phone: string;
+}
+
+export interface Car {
+    id: string;
+    name: string;
+    plate: string;
 }

@@ -1,9 +1,11 @@
 import { mockDrivers } from '../../data/mockData';
+import { useDrivers } from '../../hooks/useDrivers';
 import { FullTrip, ShortTrip, EmptyTrip } from './TripBlocks';
 
 const days = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье'];
 
 const DriverScheduleTable = () => {
+    const { data: drivers } = useDrivers();
     return (
         <div className="flex-1 overflow-auto p-6 scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-transparent">
             <div className=" overflow-hidden flex flex-col h-full">
@@ -25,7 +27,7 @@ const DriverScheduleTable = () => {
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-200">
-                            {mockDrivers.map((driver) => (
+                            {drivers?.map((driver) => (
                                 <tr key={driver.id} className="">
                                     <td className="p-4 text-sm font-medium text-gray-900 sticky left-0  z-10 border-r border-gray-200 bg-white">
                                         {driver.name}
@@ -37,7 +39,8 @@ const DriverScheduleTable = () => {
                                         >
                                             <div className="flex flex-col gap-4 px-3 pt-2 pb-6">
                                                 <span className="text-xs text-gray-600 text-center">6:00 ~ 14:00</span>
-                                                {driver.trips.length === 2 ? <FullTrip /> : driver.trips.length === 1 ? <ShortTrip /> : <EmptyTrip />}
+                                                {/* {driver.trips.length === 2 ? <FullTrip /> : driver.trips.length === 1 ? <ShortTrip /> : <EmptyTrip />} */}
+                                                <EmptyTrip />
                                             </div>
                                         </td>
                                     ))}

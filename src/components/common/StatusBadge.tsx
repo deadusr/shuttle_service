@@ -1,7 +1,5 @@
-import { PassengerStatus } from '../../types';
-
 interface StatusBadgeProps {
-    status: PassengerStatus;
+    status: "confirmed" | "waiting" | "cancelled";
 }
 
 const StatusBadge = ({ status }: StatusBadgeProps) => {
