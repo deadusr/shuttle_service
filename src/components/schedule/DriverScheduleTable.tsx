@@ -13,7 +13,6 @@ interface DriverScheduleTableProps {
 const DriverScheduleTable = ({ startDate = new Date() }: DriverScheduleTableProps) => {
     const { data: drivers } = useDrivers();
     const { data: trips } = useTrips(startDate.toISOString(), addDays(startDate, 6).toISOString());
-    console.log(trips);
 
     const assignTrips = useMemo(() => {
         return trips?.filter((trip) => trip.driver.id) || [];

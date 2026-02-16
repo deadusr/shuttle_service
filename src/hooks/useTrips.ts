@@ -166,3 +166,17 @@ export const useCreateTrip = () => {
         },
     });
 };
+
+export const useUpdateTrip = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: async ({ id, data }: { id: string; data: Partial<TripResponse> | Record<string, any> }) => {
+            return await pb.collection('trips').update(id, data);
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['trips'] });
+            queryClient.invalidateQueries({ queryKey: ['unassigned-trips'] });
+        },
+    });
+};
