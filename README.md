@@ -1,16 +1,159 @@
-# React + Vite
+## О проекте
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Межгород** — веб-приложение для управления межгородскими пассажирскими рейсами. Позволяет диспетчерам транспортной компании управлять рейсами, назначать водителей, отслеживать бронирования и планировать расписание на неделю вперёд.
 
-Currently, two official plugins are available:
+Проект решает реальную задачу автоматизации работы диспетчерской службы, заменяя Excel-таблицы и бумажные журналы на интерактивный веб-интерфейс с drag-and-drop функциональностью.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## Скриншоты
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Страница авторизации
+<p align="center">
+  <img src="docs/screenshots/login.png" alt="Страница авторизации" width="700" />
+</p>
 
-## Expanding the ESLint configuration
+### Дашборд рейсов
+<p align="center">
+  <img src="docs/screenshots/dashboard.png" alt="Дашборд рейсов" width="700" />
+</p>
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Рейсы автоматически группируются по направлениям. Каждое направление отображается в отдельной колонке с цветовой кодировкой из базы данных.
+
+### Расписание водителей
+<p align="center">
+  <img src="docs/screenshots/drivers-schedule.png" alt="Расписание водителей" width="700" />
+</p>
+
+Недельное расписание с возможностью назначения рейсов на водителей через **drag-and-drop**. Система автоматически проверяет совместимость рейсов (дату, время, направление).
+
+---
+
+##  Возможности
+
+-  **Авторизация** — мультитенантная система с привязкой к организации
+-  **Дашборд рейсов** — просмотр всех рейсов за выбранную дату, группировка по маршрутам
+-  **Расписание водителей** — недельная таблица с назначенными рейсами
+-  **Drag & Drop** — назначение рейсов на водителей перетаскиванием из панели неназначенных рейсов
+-  **Валидация назначений** — автоматическая проверка совместимости рейса с расписанием водителя
+-  **Поиск** — быстрый поиск по пассажирам, водителям и рейсам
+-  **Управление датами** — навигация по дням и неделям с URL-синхронизацией
+-  **Боковая панель** — информация о выбранном рейсе, список пассажиров
+-  **Создание рейсов** — добавление новых рейсов с привязкой к маршруту и организации
+
+---
+
+## Стек технологий
+
+| Технология | Назначение |
+|---|---|
+| **React 19** | UI-библиотека |
+| **TypeScript** | Статическая типизация |
+| **Vite 7** | Сборка и dev-сервер |
+| **TanStack Router** | Файловая маршрутизация с type-safe параметрами |
+| **TanStack Query** | Серверное состояние, кэширование, мутации |
+| **Zustand** | Клиентское состояние (UI, авторизация) |
+| **Tailwind CSS 4** | Утилитарные стили |
+| **dnd-kit** | Drag and Drop библиотека |
+| **PocketBase** | Backend (API, авторизация, БД) |
+| **date-fns** | Работа с датами |
+
+---
+
+## Структура проекта
+
+```
+src/
+├── components/          # UI-компоненты
+│   ├── common/          #   Переиспользуемые (TripChip, SidePanel)
+│   ├── icons/           #   SVG-иконки как React-компоненты
+│   ├── passenger/       #   Компоненты пассажиров
+│   ├── schedule/        #   Расписание водителей
+│   │   ├── cards/       #     Карточки рейсов (DnD, одиночные, туда-обратно)
+│   │   └── ...          #     Таблица, зоны сброса, панель неназначенных
+│   └── trip/            #   Компоненты рейсов
+├── hooks/               # React Query хуки (useTrips, useDrivers, useBookings, useRoutes)
+├── lib/                 # Конфигурация PocketBase
+├── routes/              # TanStack Router — файловая маршрутизация
+│   ├── __root.tsx       #   Корневой layout (sidebar, header, panels)
+│   ├── index.tsx        #   Дашборд рейсов
+│   ├── login.tsx        #   Авторизация
+│   ├── drivers.tsx      #   Layout водителей (DnD контекст)
+│   └── drivers/
+│       └── index.tsx    #   Таблица расписания
+├── store/               # Zustand stores (auth, UI)
+├── types.ts             # TypeScript интерфейсы (Trip, Driver, Route, Booking)
+└── utils/               # Утилиты (валидация назначений, строки)
+```
+
+---
+
+## Архитектура
+
+```mermaid
+graph TB
+    subgraph Frontend["Frontend (React + Vite)"]
+        Router["TanStack Router<br/>Файловая маршрутизация"]
+        Query["TanStack Query<br/>Серверное состояние"]
+        Zustand["Zustand<br/>UI состояние"]
+        DnD["dnd-kit<br/>Drag & Drop"]
+    end
+
+    subgraph Backend["Backend (PocketBase)"]
+        Auth["Авторизация"]
+        API["REST API"]
+        DB["SQLite БД"]
+        Rules["Правила доступа<br/>(organization filter)"]
+    end
+
+    Router --> Query
+    Query --> API
+    Zustand --> Router
+    DnD --> Query
+    API --> Auth
+    API --> DB
+    Auth --> Rules
+```
+
+---
+
+## Быстрый старт
+
+### Предварительные требования
+
+- [Node.js](https://nodejs.org/) 18+
+- [PocketBase](https://pocketbase.io/) 0.26+
+
+### Установка
+
+```bash
+# Клонировать репозиторий
+git clone https://github.com/<your-username>/mezhgorod.git
+cd mezhgorod
+
+# Установить зависимости
+npm install
+
+# Создать файл переменных окружения
+cp .env.example .env
+
+# Запустить PocketBase (в отдельном терминале)
+./pocketbase serve
+
+# Запустить dev-сервер
+npm run dev
+```
+
+Приложение будет доступно по адресу `http://localhost:5173`
+
+### Переменные окружения
+
+| Переменная | Описание | По умолчанию |
+|---|---|---|
+| `VITE_POCKETBASE_URL` | URL сервера PocketBase | `http://127.0.0.1:8090` |
+
+---
+
+## Лицензия
+
+MIT

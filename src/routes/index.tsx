@@ -2,7 +2,7 @@ import { createFileRoute, useSearch } from '@tanstack/react-router'
 import TripCard from '../components/TripCard';
 import { useUIStore } from '../store/uiStore';
 import { useTrips } from '../hooks/useTrips';
-import { useRoutes } from '../hooks/useRotes';
+import { useRoutes } from '../hooks/useRoutes';
 import { format } from 'date-fns';
 
 export const Route = createFileRoute('/')({
