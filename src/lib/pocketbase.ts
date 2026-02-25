@@ -1,8 +1,6 @@
 import PocketBase from 'pocketbase';
 
-// Если разрабатываешь локально — адрес локального сервера
-// Когда купишь VPS — поменяешь на свой домен
-const url = 'http://127.0.0.1:8090';
+const url = import.meta.env.VITE_POCKETBASE_URL;
 
 export const pb = new PocketBase(url);
 
