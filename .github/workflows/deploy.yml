@@ -26,12 +26,13 @@ jobs:
         env:
           VITE_POCKETBASE_URL: https://shuttle-service.duckdns.org
 
-      - name: Copy files to VPS
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.SERVER_IP }}
-          username: ${{ secrets.SERVER_USERNAME }}
-          key: ${{ secrets.SERVER_SSH_KEY }}
-          source: "dist/*"
-          target: "/var/www/react"
-          strip_components: 1 # Убирает папку dist из пути при копировании
+      - name: Setup SSH Key and Deploy
+        run: |
+          mkdir -p ~/.ssh
+          
+          echo "${{ secrets.SERVER_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          
+          ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
+          
+          scp -i ~/.ssh/deploy_key -r dist/* ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_IP }}:/var/www/react/
